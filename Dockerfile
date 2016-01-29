@@ -1,3 +1,5 @@
+FROM danielchalef/armhf-ubuntu-core:15.04
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV JASPER_HOME /opt/jasper
 RUN export JASPER_HOME=$JASPER_HOME
