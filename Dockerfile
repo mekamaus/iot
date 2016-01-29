@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM debian:14.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV JASPER_HOME /opt/jasper
