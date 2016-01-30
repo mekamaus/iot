@@ -3,8 +3,8 @@ FROM resin/raspberrypi-python
 ENV INITSYSTEM on
 
 RUN apt-get update \
-	&& apt-get install -y python \
+	&& apt-get install -y python
 
-RUN apt-get install python-sense-hat
+RUN pip install sense-hat
 
 CMD ["python", "/app/main.py"]
