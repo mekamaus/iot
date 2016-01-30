@@ -7,4 +7,5 @@ RUN apt-get update \
 
 RUN pip install sense-hat
 
+COPY ./app /app
 CMD ["python", "/app/main.py"]
