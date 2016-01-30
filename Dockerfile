@@ -6,7 +6,7 @@ RUN apt-get update \
 	&& apt-get install -y python \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install sense_hat
+RUN apt-get install sense-hat
 RUN pip install pillow
 
 COPY . /app
