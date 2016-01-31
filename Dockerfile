@@ -1,4 +1,4 @@
-FROM resin/raspberrypi-python
+FROM resin/raspbian
 
 ENV INITSYSTEM on
 
