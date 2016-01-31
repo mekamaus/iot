@@ -1,4 +1,4 @@
-FROM resin/raspbian
+FROM resin/rpi-raspbian
 
 ENV INITSYSTEM on
 
