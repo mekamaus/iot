@@ -40,6 +40,7 @@ RUN apt-get update \
 	#&& apt-get build-dep -y python-imaging \
 	#&& apt-get install -y libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev \
 	#&& apt-get install -y python python-dev python-distribute python-pip \
+	&& pip install --upgrade pip
 	&& pip install -r ./requirements.txt
 
 # copy current directory into /app
