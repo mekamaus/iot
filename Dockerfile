@@ -23,5 +23,3 @@ RUN pip install -r /app/requirements.txt
 EXPOSE 80
 
 WORKDIR /app
-
-CMD ["python", "/app/main.py"]
