@@ -33,17 +33,17 @@ ENV INITSYSTEM on
 RUN apt-get update \
 	&& apt-get install -y python \
 	# Remove package lists to free up space
-	#&& rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/apt/lists/*
   # Install dependencies
-	&& apt-get install -y tar git curl nano wget net-tools build-essential \
-	&& apt-get install -y gcc libc6 \
-	&& apt-get build-dep -y python-imaging \
-	&& apt-get install -y libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev \
-	&& apt-get install -y python python-dev python-distribute python-pip \
+	#&& apt-get install -y tar git curl nano wget net-tools build-essential \
+	#&& apt-get install -y gcc libc6 \
+	#&& apt-get build-dep -y python-imaging \
+	#&& apt-get install -y libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev \
+	#&& apt-get install -y python python-dev python-distribute python-pip \
 	&& pip install -r ./requirements.txt
 
 # copy current directory into /app
-ADD ./app /app
+COPY . /app
 
 # run python script when container lands on device
-CMD ["python", "/app/main.py"]
+CMD ["python", "/app/hello.py"]
