@@ -35,7 +35,7 @@ RUN apt-get update \
 	# Remove package lists to free up space
 	&& rm -rf /var/lib/apt/lists/* \
   # Install dependencies
-	&& apt-get install -y tar git curl nano wget dialog net-tools build-essential \
+	&& apt-get install -y tar git curl nano wget net-tools build-essential \
 	&& apt-get install -y libblas3 liblapack3 gcc gfortran libc6 \
 	&& apt-get build-dep -y python-imaging \
 	&& apt-get install -y libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev \
