@@ -33,7 +33,7 @@ ENV INITSYSTEM on
 RUN apt-get update \
 	&& apt-get install -y python \
 	# Remove package lists to free up space
-	&& rm -rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/* \
   # Install dependencies
 	#&& apt-get install -y tar git curl nano wget net-tools build-essential \
 	#&& apt-get install -y gcc libc6 \
