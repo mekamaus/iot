@@ -24,4 +24,4 @@ EXPOSE 80
 
 WORKDIR /app
 
-CMD python /app/main.py
+CMD ["python", "/app/main.py"]
