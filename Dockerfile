@@ -48,7 +48,7 @@ RUN apt-get update \
 	# && python setup.py install \
 	# && cd ../../.. \
 	# Install sense-hat API
-	&& apt-get install -y sense-hat
+	&& pip install sense-hat
 
 # copy current directory into /app
 COPY ./app /app
