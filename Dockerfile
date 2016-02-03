@@ -54,4 +54,4 @@ RUN apt-get update \
 COPY ./app /app
 
 # run python script when container lands on device
-CMD ["python", "/app/main.py"]
+CMD ["python", "/app/hello.py"]
