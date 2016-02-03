@@ -42,6 +42,7 @@ RUN apt-get update \
 	#&& apt-get install -y python python-dev python-distribute python-pip \
 	#&& apt-get install -y python-dev \
 	# Install RTIMULib
+	&& chmod -R +rx ./RTIMULib
 	&& cd ./RTIMULib/Linux/python \
 	&& python setup.py build \
 	&& python setup.py install \
