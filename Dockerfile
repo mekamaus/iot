@@ -44,7 +44,7 @@ RUN apt-get update \
 	&& pip install sense-hat
 
 # copy current directory into /app
-COPY . /app
+COPY ./app /app
 
 # run python script when container lands on device
-CMD ["python", "/app/hello.py"]
+CMD ["python", "/app/main.py"]
