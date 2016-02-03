@@ -40,7 +40,7 @@ RUN apt-get update \
 	#&& apt-get build-dep -y python-imaging \
 	#&& apt-get install -y libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev \
 	#&& apt-get install -y python python-dev python-distribute python-pip \
-	&& apt-get install -y python-dev \
+	&& apt-get install -y python2.7-dev \
 	&& git clone https://github.com/sailoog/RTIMULib \
 	&& cd ./RTIMULib/Linux/python \
 	&& python setup.py build \
