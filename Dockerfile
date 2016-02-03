@@ -42,11 +42,11 @@ RUN apt-get update \
 	#&& apt-get install -y python python-dev python-distribute python-pip \
 	#&& apt-get install -y python-dev \
 	# Install RTIMULib
-	&& ls . \
-	&& cd ./RTIMULib/Linux/python \
-	&& python setup.py build \
-	&& python setup.py install \
-	&& cd ../../.. \
+	# && ls . \
+	# && cd ./RTIMULib/Linux/python \
+	# && python setup.py build \
+	# && python setup.py install \
+	# && cd ../../.. \
 	# Install sense-hat API
 	&& apt-get install -y sense-hat
 
