@@ -43,16 +43,20 @@ RUN apt-get update \
 	#&& apt-get install -y python-dev \
 
 # Install RTIMULib
-RUN git clone https://github.com/richards-tech/RTIMULib.git /RTIMULib \
-	&& cd /RTIMULib/RTIMULib \
-	&& mkdir build \
-	&& cd build \
-	&& cmake \
-	&& make \
-	&& make install \
-	&& ldconfig
+# RUN git clone https://github.com/richards-tech/RTIMULib.git /RTIMULib \
+# 	&& cd /RTIMULib/RTIMULib \
+# 	&& mkdir build \
+# 	&& cd build \
+# 	&& cmake \
+# 	&& make \
+# 	&& make install \
+# 	&& ldconfig
 
-RUN cd /RTIMULib/Linux/RTIMULibCal && make && make install
+RUN git clone https://github.com/richards-tech/RTIMULib.git
+
+RUN cd /RTIMULib/Linux/RTIMULibCal \
+	&& make \
+	&& make install
 
 RUN cd /RTIMULib/Linux/python \
   && python setup.py build \
