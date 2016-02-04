@@ -31,9 +31,11 @@ ENV INITSYSTEM on
 
 # Install Python.
 RUN apt-get update \
-	&& apt-get install -y python \
-	# Remove package lists to free up space
-	&& rm -rf /var/lib/apt/lists/*
+	apt-get install -y sudo usbutils python python-dev git-core cmake g++ module-init-tools
+# RUN apt-get update \
+# 	&& apt-get install -y python \
+# 	# Remove package lists to free up space
+# 	&& rm -rf /var/lib/apt/lists/*
   # Install dependencies
 	#&& apt-get install -y tar git curl nano wget net-tools build-essential \
 	#&& apt-get install -y gcc libc6 \
