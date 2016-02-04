@@ -73,6 +73,9 @@ RUN cd /RTIMULib/Linux/python \
 RUN pip install --upgrade pip \
  	&& pip install sense-hat
 
+# Install audio library
+RUN apt-get install python-pyaudio
+
 # copy current directory into /app
 COPY ./app /app
 
