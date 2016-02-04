@@ -68,8 +68,10 @@ RUN cd /RTIMULib/Linux/python \
 	# && python setup.py build \
 	# && python setup.py install \
 	# && cd ../../.. \
-	# Install sense-hat API
-	&& pip install sense-hat
+
+# Install sense-hat API
+RUN pip install --upgrade pip \
+ 	&& pip install sense-hat
 
 # copy current directory into /app
 COPY ./app /app
