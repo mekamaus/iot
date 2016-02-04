@@ -24,8 +24,8 @@ RUN pip install --upgrade pip \
 # Install audio library
 RUN apt-get install python-pyaudio
 
-# Install analyse
-RUN pip install analyse
+# Install sound analysis package
+RUN pip install SoundAnalyse
 
 # copy current directory into /app
 COPY ./app /app
