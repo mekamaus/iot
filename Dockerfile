@@ -31,7 +31,7 @@ ENV INITSYSTEM on
 
 # Install Python.
 RUN apt-get update \
-	apt-get install -y sudo usbutils python python-dev git-core cmake g++ module-init-tools
+	&& apt-get install -y sudo usbutils python python-dev git-core cmake g++ module-init-tools
 # RUN apt-get update \
 # 	&& apt-get install -y python \
 # 	# Remove package lists to free up space
