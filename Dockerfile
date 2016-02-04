@@ -33,7 +33,7 @@ ENV INITSYSTEM on
 RUN apt-get update \
 	&& apt-get install -y python \
 	# Remove package lists to free up space
-	&& rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/apt/lists/*
   # Install dependencies
 	#&& apt-get install -y tar git curl nano wget net-tools build-essential \
 	#&& apt-get install -y gcc libc6 \
@@ -41,8 +41,23 @@ RUN apt-get update \
 	#&& apt-get install -y libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev \
 	#&& apt-get install -y python python-dev python-distribute python-pip \
 	#&& apt-get install -y python-dev \
-	# Install RTIMULib
-	&& ls / \
+
+# Install RTIMULib
+RUN git clone https://github.com/richards-tech/RTIMULib.git /RTIMULib \
+	&& cd /RTIMULib/RTIMULib \
+	&& mkdir build \
+	&& cd build \
+	&& cmake \
+	&& make \
+	&& make install \
+	&& ldconfig
+
+RUN cd /RTIMULib/Linux/RTIMULibCal && make && make install
+
+RUN cd /RTIMULib/Linux/python \
+  && python setup.py build \
+	&& python setup.py install
+
 	# && cd ./RTIMULib/Linux/python \
 	# && python setup.py build \
 	# && python setup.py install \
