@@ -4,10 +4,6 @@ from time import sleep
 import numpy
 import pyaudio
 import analyse
-
-sense = SenseHat()
-
-import numpy
 import pyaudio
 import analyse
 
