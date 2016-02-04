@@ -75,4 +75,4 @@ RUN cd /RTIMULib/Linux/python \
 COPY ./app /app
 
 # run python script when container lands on device
-CMD ["python", "/app/hello.py"]
+CMD ["python", "/app/main.py"]
