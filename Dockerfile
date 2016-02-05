@@ -27,6 +27,9 @@ RUN apt-get install python-pyaudio
 # Install sound analysis package
 RUN pip install SoundAnalyse
 
+# Install Pi camera support
+RUN pip install picamera
+
 # copy current directory into /app
 COPY ./app /app
 
