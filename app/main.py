@@ -10,7 +10,7 @@ import analyse
 # Initialize PyAudio
 pyaud = pyaudio.PyAudio()
 
-sense = sense_hat.SenseHat()
+sense = SenseHat()
 
 # Open input stream, 16-bit mono at 44100 Hz
 # On my system, device 4 is a USB microphone
