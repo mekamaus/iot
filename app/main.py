@@ -21,15 +21,33 @@ stream = pyaud.open(
   input_device_index = 3,
   input = True)
 
+min_samp = 0
+max_samp = 512
+
 while True:
   # Read raw microphone data
   rawsamps = stream.read(1024)
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
 
-  values = [samps[((((i % 8) - 3.5) ** 2 + ((i / 8) - 3.5) ** 2) ** 0.5) * 1024 / (3.5 * 2 ** 0.5 + 0.001)] for i in range(64)]
+  distances = [
+    ((((i % 8) - 3.5) ** 2 + ((i / 8) - 3.5) ** 2) ** 0.5)
+    for i in range(64)
+  ]
+  indices = [
+    dist * 1024 / (3.5 * 2 ** 0.5 + 0.001)
+    for dist in distances
+  ]
+  values = [
+    samps[index]
+    for index in indices
+  ]
   pixels = [
-    (255 * (v + 1024) / 2048, 255 * (v + 1024) / 2048, 255 * (v + 1024) / 2048)
+    (
+      max(min(255 * (v - min_samp) / (max_samp - min_samp), 255), 0),
+      max(min(255 * (v - min_samp) / (max_samp - min_samp), 255), 0),
+      max(min(255 * (v - min_samp) / (max_samp - min_samp), 255), 0)
+    )
     for v in values
   ]
 
