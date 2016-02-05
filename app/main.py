@@ -24,6 +24,6 @@ while True:
   rawsamps = stream.read(1024)
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
-  print(samps)
+  print(len(samps))
   # Show the volume and pitch
   #print(analyse.loudness(samps), analyse.musical_detect_pitch(samps))
