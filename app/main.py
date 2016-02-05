@@ -26,7 +26,7 @@
 #
 # while True:
 #   # Read raw microphone data
-#   rawsamps = stream.read(16384)
+#   rawsamps = stream.read(8192)
 #   # Convert raw data to NumPy array
 #   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
 #
