@@ -17,7 +17,7 @@ sense = SenseHat()
 stream = pyaud.open(
   format = pyaudio.paInt16,
   channels = 1,
-  rate = 48000,
+  rate = 8000,
   input_device_index = 3,
   input = True)
 
