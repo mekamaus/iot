@@ -17,7 +17,7 @@ sense = SenseHat()
 stream = pyaud.open(
   format = pyaudio.paInt16,
   channels = 1,
-  rate = 8000,
+  rate = 44100,
   input_device_index = 3,
   input = True)
 
@@ -26,7 +26,7 @@ max_samp = 512
 
 while True:
   # Read raw microphone data
-  rawsamps = stream.read(1024)
+  rawsamps = stream.read(8192)
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
 
@@ -35,7 +35,7 @@ while True:
     for i in range(64)
   ]
   indices = [
-    dist * 1024 / (3.5 * 2 ** 0.5 + 0.001)
+    dist * len(samps) / (3.5 * 2 ** 0.5 + 0.001)
     for dist in distances
   ]
   values = [
