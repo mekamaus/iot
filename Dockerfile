@@ -30,13 +30,13 @@ RUN pip install --upgrade pip \
  	&& pip install sense-hat
 
 # Install audio library
-RUN apt-get install python-pyaudio python-picamera
+RUN apt-get install python-pyaudio
 
 # Enable camera
 RUN chmod +x /set-camera.sh && /set-camera.sh
 
 # Install sound analysis package
-RUN pip install SoundAnalyse
+RUN pip install SoundAnalyse picamera
 
 # copy current directory into /app
 COPY ./app /app
