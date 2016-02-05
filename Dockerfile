@@ -5,27 +5,28 @@ ENV INITSYSTEM on
 
 # Install Python.
 RUN apt-get update \
-	&& apt-get install -y sudo usbutils python python-dev git-core cmake g++ module-init-tools
+	&& apt-get install -y sudo usbutils python python-dev git-core cmake g++ module-init-tools sense-hat python-pyaudio python-picamera
 
-RUN git clone https://github.com/richards-tech/RTIMULib.git
-
-RUN cd /RTIMULib/Linux/RTIMULibCal \
-	&& make \
-	&& make install
-
-RUN cd /RTIMULib/Linux/python \
-  && python setup.py build \
-	&& python setup.py install
+# RUN git clone https://github.com/richards-tech/RTIMULib.git
+#
+# RUN cd /RTIMULib/Linux/RTIMULibCal \
+# 	&& make \
+# 	&& make install
+#
+# RUN cd /RTIMULib/Linux/python \
+#   && python setup.py build \
+# 	&& python setup.py install
 
 # Install sense hat API
-RUN pip install --upgrade pip \
- 	&& pip install sense-hat
+#RUN pip install --upgrade pip \
+# 	&& pip install sense-hat
 
 # Install audio library
-RUN apt-get install python-pyaudio python-picamera
+# RUN apt-get install python-pyaudio python-picamera
 
 # Install sound analysis package
-RUN pip install SoundAnalyse
+RUN pip install --upgrade pip \
+  && install SoundAnalyse
 
 # copy current directory into /app
 COPY ./app /app
