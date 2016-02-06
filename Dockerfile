@@ -3,6 +3,8 @@ FROM resin/raspberrypi-python
 # Enable systemd
 ENV INITSYSTEM on
 
+RUN rpi-update
+
 # Install Python.
 RUN apt-get update \
 	&& apt-get install -y \
