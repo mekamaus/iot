@@ -16,7 +16,8 @@ RUN apt-get update \
 		module-init-tools
 
 # Enable camera
-RUN chmod +x ./set-camera.sh && ./set-camera.sh
+COPY ./set-camera.sh /set-camera.sh
+RUN chmod +x /set-camera.sh && /set-camera.sh
 
 RUN git clone https://github.com/richards-tech/RTIMULib.git
 
