@@ -3,8 +3,6 @@ FROM resin/raspberrypi-python
 # Enable systemd
 ENV INITSYSTEM on
 
-RUN rpi-update
-
 # Install Python.
 RUN apt-get update \
 	&& apt-get install -y \
@@ -18,8 +16,6 @@ RUN apt-get update \
 		module-init-tools
 
 # Enable camera
-COPY ./set-camera.sh /set-camera.sh
-RUN ls /boot
 RUN chmod +x /set-camera.sh && /set-camera.sh
 
 RUN git clone https://github.com/richards-tech/RTIMULib.git
