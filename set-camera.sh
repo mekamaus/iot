@@ -1,4 +1,5 @@
 #!/bin/bash
+touch /boot/config.txt
 grep "start_x=1" /boot/config.txt
 if grep "start_x=1" /boot/config.txt
 then
