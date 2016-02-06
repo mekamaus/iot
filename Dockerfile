@@ -33,7 +33,7 @@ RUN pip install --upgrade pip \
 RUN apt-get install python-pyaudio
 
 # Enable camera
-RUN chmod +x /set-camera.sh && /set-camera.sh
+RUN chmod +x ./set-camera.sh && ./set-camera.sh
 
 # Install sound analysis package
 RUN pip install SoundAnalyse picamera
