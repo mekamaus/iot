@@ -15,6 +15,9 @@ RUN apt-get update \
 		g++ \
 		module-init-tools
 
+# Enable camera
+RUN chmod +x ./set-camera.sh && ./set-camera.sh
+
 RUN git clone https://github.com/richards-tech/RTIMULib.git
 
 RUN cd /RTIMULib/Linux/RTIMULibCal \
@@ -31,9 +34,6 @@ RUN pip install --upgrade pip \
 
 # Install audio library
 RUN apt-get install python-pyaudio
-
-# Enable camera
-RUN chmod +x ./set-camera.sh && ./set-camera.sh
 
 # Install sound analysis package
 RUN pip install SoundAnalyse picamera
