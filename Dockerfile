@@ -19,7 +19,7 @@ RUN apt-get update \
 COPY ./set-camera.sh /set-camera.sh
 RUN chmod +x /set-camera.sh && /set-camera.sh
 
-RUN git clone https://github.com/richards-tech/RTIMULib.git
+RUN git clone -i -t https://github.com/richards-tech/RTIMULib.git
 
 RUN cd /RTIMULib/Linux/RTIMULibCal \
 	&& make \
