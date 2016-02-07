@@ -7,6 +7,9 @@ import analyse
 import pyaudio
 import analyse
 
+audio_rate = 44100
+num_samples = 32768
+
 # Initialize PyAudio
 pyaud = pyaudio.PyAudio()
 
@@ -17,7 +20,7 @@ sense = SenseHat()
 stream = pyaud.open(
   format = pyaudio.paInt16,
   channels = 1,
-  rate = 44100,
+  rate = audio_rate,
   input_device_index = 3,
   input = True)
 
@@ -26,7 +29,7 @@ max_samp = 512
 
 while True:
   # Read raw microphone data
-  rawsamps = stream.read(8192)
+  rawsamps = stream.read(num_samples)
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
 
