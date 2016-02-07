@@ -8,7 +8,7 @@ import pyaudio
 import analyse
 
 audio_rate = 44100
-num_samples = 1048576
+num_samples = 8192
 
 # Initialize PyAudio
 pyaud = pyaudio.PyAudio()
@@ -29,6 +29,7 @@ max_samp = 512
 
 while True:
   # Read raw microphone data
+  print(len(stream))
   rawsamps = stream.read(num_samples)
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
