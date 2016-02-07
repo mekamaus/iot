@@ -29,7 +29,7 @@ max_samp = 512
 
 while True:
   # Read raw microphone data
-  print(dir(stream))
+  print(stream.get_read_available())
   rawsamps = stream.read(num_samples)
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
