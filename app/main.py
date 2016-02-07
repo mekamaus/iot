@@ -21,7 +21,7 @@ stream = pyaud.open(
   format = pyaudio.paInt16,
   channels = 1,
   rate = audio_rate,
-  input_device_index = 3,
+  input_device_index = 4,
   input = True)
 
 min_samp = -512
@@ -30,7 +30,7 @@ max_samp = 512
 while True:
   # Read raw microphone data
   try:
-    rawsamps = stream.read(stream.get_read_available())
+    rawsamps = stream.read(8192)
   except IOError:
     print('Overflow')
   # Convert raw data to NumPy array
