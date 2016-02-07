@@ -38,15 +38,13 @@ RUN pip install --upgrade pip \
  	&& pip install sense-hat
 
 # Install audio library
-RUN apt-get install python-pyaudio
+RUN apt-get install python-pyaudio alsa-tools alsa-utils
 
 # Install sound analysis package
 RUN pip install SoundAnalyse picamera
 
 # copy current directory into /app
 COPY /app /app
-
-CMD pulseaudio --kill && jack_control start
 
 # run python script when container lands on device
 CMD ["python", "/app/main.py"]
