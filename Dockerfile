@@ -13,7 +13,8 @@ RUN apt-get update \
 		git-core \
 		cmake \
 		g++ \
-		module-init-tools
+		module-init-tools \
+		multimedia-jack
 
 # Enable camera
 COPY ./set-camera.sh /set-camera.sh
@@ -44,6 +45,8 @@ RUN pip install SoundAnalyse picamera
 
 # copy current directory into /app
 COPY /app /app
+
+CMD pulseaudio --kill && jack_control start
 
 # run python script when container lands on device
 CMD ["python", "/app/main.py"]
