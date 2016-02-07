@@ -62,7 +62,6 @@ while True:
 
   sense.set_pixels(pixels)
 
-  # Show the volume and pitch
   #print(analyse.loudness(samps), analyse.musical_detect_pitch(samps))
 
 
