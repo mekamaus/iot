@@ -36,6 +36,9 @@ while True:
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
 
+  if len(samps) == 0:
+    continue
+  
   distances = [
     ((((i % 8) - 3.5) ** 2 + ((i / 8) - 3.5) ** 2) ** 0.5)
     for i in range(64)
