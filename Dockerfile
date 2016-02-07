@@ -19,7 +19,8 @@ RUN apt-get update \
 COPY ./set-camera.sh /set-camera.sh
 RUN chmod +x /set-camera.sh && /set-camera.sh
 
-RUN git clone -i -t https://github.com/richards-tech/RTIMULib.git
+# Install RTIMULib
+COPY /RTIMULib /RTIMULib
 
 RUN cd /RTIMULib/Linux/RTIMULibCal \
 	&& make \
@@ -28,6 +29,8 @@ RUN cd /RTIMULib/Linux/RTIMULibCal \
 RUN cd /RTIMULib/Linux/python \
   && python setup.py build \
 	&& python setup.py install
+
+RUN rm -r /RTIMULib
 
 # Install sense hat API
 RUN pip install --upgrade pip \
@@ -40,7 +43,7 @@ RUN apt-get install python-pyaudio
 RUN pip install SoundAnalyse picamera
 
 # copy current directory into /app
-COPY ./app /app
+COPY /app /app
 
 # run python script when container lands on device
 CMD ["python", "/app/main.py"]
