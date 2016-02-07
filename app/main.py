@@ -29,7 +29,10 @@ max_samp = 512
 
 while True:
   # Read raw microphone data
-  rawsamps = stream.read(stream.get_read_available(), False)
+  try:
+    rawsamps = stream.read(stream.get_read_available())
+  except IOError:
+    print('Overflow')
   # Convert raw data to NumPy array
   samps = numpy.fromstring(rawsamps, dtype=numpy.int16)
 
