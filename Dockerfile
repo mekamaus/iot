@@ -38,7 +38,7 @@ RUN pip install --upgrade pip \
  	&& pip install sense-hat
 
 # Install audio library
-RUN apt-get install python-pyaudio alsa-tools alsa-utils
+RUN apt-get install python-pyaudio
 
 # Install sound analysis package
 RUN pip install SoundAnalyse picamera

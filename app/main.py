@@ -8,7 +8,7 @@ import pyaudio
 import analyse
 
 audio_rate = 44100
-num_samples = 1024
+num_samples = 1048576
 
 # Initialize PyAudio
 pyaud = pyaudio.PyAudio()
