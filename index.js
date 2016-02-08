@@ -23,7 +23,8 @@ var devname = function (path) {
   return '/dev/' + path.split('/').reverse()[0];
 };
 
-var fb = prospects.then(function (a) {
+console.log('Finding glob:');
+prospects.then(function (a) {
   console.log('Found:', a);
   var r = stream(a)
     .filter(hasNamefile)
