@@ -1,5 +1,3 @@
-'use strict';
-
 var fsp = require('fs-promise');
 var glob = require('glob-promise');
 var path = require('path');
@@ -8,8 +6,6 @@ var stream = require('streamjs');
 var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
-
-var prospects = glob('/sys/class/graphics/fb*');
 
 var hasNamefile = function (dir) {
   return fsp.existsSync(namefile(dir));
@@ -23,15 +19,15 @@ var devname = function (path) {
   return '/dev/' + path.split('/').reverse()[0];
 };
 
-console.log('Finding glob:');
-prospects.then(function (a) {
-  console.log('Found:', a);
-  var r = stream(a)
-    .filter(hasNamefile)
-    .filter(isSenseHatMatrix)
-    .findFirst();
-  return r;
-});
+glob('/sys/class/graphics/fb*')
+  .then(function (a) {
+    console.log('Found:', a);
+    var r = stream(a)
+      .filter(hasNamefile)
+      .filter(isSenseHatMatrix)
+      .findFirst();
+    return r;
+  });
 
 var unpack = function (n) {
   var r = (n & 0xF800) >> 11;
