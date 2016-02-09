@@ -105,9 +105,9 @@ var random = function (low, high) {
 
 var rrc = rc.then(function (fb) {
   console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
-  for (let n = 1; --n >= 0; ) {
-    for (let y = 8; --y >= 0; ) {
-      for (let x = 8; --x >= 0; ) {
+  for (var n = 1; --n >= 0; ) {
+    for (var y = 8; --y >= 0; ) {
+      for (var x = 8; --x >= 0; ) {
         setPixel(fb, x, y, [random(0, 255), random(0, 255), random(0, 255)]);
       }
     }
