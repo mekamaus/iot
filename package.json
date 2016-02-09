@@ -21,6 +21,7 @@
     "fs-promise": "^0.4.1",
     "glob-promise": "^1.0.6",
     "path": "^0.12.7",
+    "polyfill": "^0.1.0",
     "streamjs": "^1.6.4"
   }
 }
