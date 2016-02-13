@@ -51,6 +51,6 @@
 
 FROM resin/rpi-raspbian
 
-RUN apt-get install wget
+RUN apt-get install yum && yum install wget
 
 CMD wget -qO- http://ipecho.net/plain ; echo
