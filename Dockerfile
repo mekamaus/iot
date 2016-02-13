@@ -51,4 +51,6 @@
 
 FROM resin/rpi-raspbian
 
+RUN apt-get install wget
+
 CMD wget -qO- http://ipecho.net/plain ; echo
