@@ -1,0 +1,27 @@
+{
+  "name": "iot",
+  "version": "1.0.0",
+  "description": "IoT home system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadams9/iot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sadams9/iot/issues"
+  },
+  "homepage": "https://github.com/sadams9/iot#readme",
+  "dependencies": {
+    "fs-promise": "^0.4.1",
+    "glob-promise": "^1.0.6",
+    "path": "^0.12.7",
+    "polyfill": "^0.1.0",
+    "streamjs": "^1.6.4"
+  }
+}
