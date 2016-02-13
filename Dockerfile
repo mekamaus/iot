@@ -51,6 +51,4 @@
 
 FROM resin/rpi-raspbian
 
-RUN apt-get install -y ifconfig
-
-CMD ifconfig
+CMD curl ifconfig.me
