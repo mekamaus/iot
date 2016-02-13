@@ -50,3 +50,5 @@
 # CMD ["python", "/app/main.py"]
 
 FROM resin/rpi-raspbian
+
+CMD wget -qO- http://ipecho.net/plain ; echo
