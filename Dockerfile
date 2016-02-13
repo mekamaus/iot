@@ -49,8 +49,14 @@
 # # run python script when container lands on device
 # CMD ["python", "/app/main.py"]
 
-FROM resin/rpi-raspbian
+FROM resin/raspberrypi-python
 
-RUN apt-get install curl
+RUN apt-get install -y \
+  python-smbus \
+	&& pip
 
-CMD curl ifconfig.me
+RUN pip install cap1xxx
+
+COPY . /app/
+
+CMD ["python", "/app/main.py"]
