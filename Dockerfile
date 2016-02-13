@@ -51,4 +51,6 @@
 
 FROM resin/rpi-raspbian
 
+RUN apt-get install -y net-tools
+
 CMD ifconfig
