@@ -51,4 +51,6 @@
 
 FROM resin/rpi-raspbian
 
+RUN apt-get install curl
+
 CMD curl ifconfig.me
