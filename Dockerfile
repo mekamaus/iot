@@ -51,6 +51,4 @@
 
 FROM resin/rpi-raspbian
 
-RUN yum install wget
-
-CMD wget -qO- http://ipecho.net/plain ; echo
+CMD ifconfig
