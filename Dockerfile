@@ -64,4 +64,4 @@ RUN apt-get update && apt-get install -y curl
 #
 # CMD ["python", "/app/main.py"]
 
-RUN curl -sSL get.pimoroni.com/pianohat -y | bash
+RUN curl -sSL get.pimoroni.com/pianohat | bash /dev/stdin -y
