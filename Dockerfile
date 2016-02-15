@@ -52,7 +52,7 @@
 
 FROM resin/raspberrypi-python
 
-RUN env
+ENV TERM dumb
 
 RUN apt-get update && apt-get install -y \
   apt-utils python python-dev
