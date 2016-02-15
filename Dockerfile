@@ -55,7 +55,7 @@ FROM resin/rpi-raspbian
 # ENV TERM dumb
 
 RUN apt-get update && apt-get install -y \
-  apt-utils python python-dev python-pip
+  apt-utils python python-dev python-pip gcc
 
 RUN pip install --upgrade pip
 
