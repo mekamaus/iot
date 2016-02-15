@@ -52,6 +52,11 @@
 
 FROM resin/raspberrypi-python
 
+RUN env
+
+RUN apt-get update && apt-get install -y \
+  python python-dev
+
 RUN pip install smbus-cffi cap1xxx
 
 COPY . /app/
