@@ -52,6 +52,8 @@
 
 FROM resin/raspberrypi-python
 
+RUN apt-get install python-smbus
+
 RUN pip install cap1xxx
 
 COPY . /app/
