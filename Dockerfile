@@ -52,17 +52,17 @@
 
 FROM resin/rpi-raspbian
 
-# ENV TERM dumb
+# RUN apt-get update && apt-get install -y \
+#   apt-utils python python-dev python-pip gcc libffi-dev
+#
+# RUN pip install --upgrade pip
+#
+# RUN pip install smbus-cffi cap1xxx RPi.GPIO
+#
+# RUN curl -sS get.pimoroni.com/i2c | bash
+#
+# COPY . /app/
+#
+# CMD ["python", "/app/main.py"]
 
-RUN apt-get update && apt-get install -y \
-  apt-utils python python-dev python-pip gcc libffi-dev
-
-RUN pip install --upgrade pip
-
-RUN pip install smbus-cffi cap1xxx RPi.GPIO
-
-RUN curl -sS get.pimoroni.com/i2c | bash
-
-COPY . /app/
-
-CMD ["python", "/app/main.py"]
+RUN curl -sSL get.pimoroni.com/pianohat -y | bash
