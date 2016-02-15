@@ -50,9 +50,9 @@
 # CMD ["python", "/app/main.py"]
 
 
-FROM resin/raspberrypi-python
+FROM resin/rpi-raspbian
 
-ENV TERM dumb
+# ENV TERM dumb
 
 RUN apt-get update && apt-get install -y \
   apt-utils python python-dev
