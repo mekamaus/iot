@@ -52,9 +52,9 @@
 
 FROM resin/rpi-raspbian
 
-# RUN apt-get update && apt-get install -y \
-#   apt-utils python python-dev python-pip gcc libffi-dev
-#
+RUN apt-get update && apt-get install -y \
+  apt-utils python python-dev python-pip gcc libffi-dev
+
 # RUN pip install --upgrade pip
 #
 # RUN pip install smbus-cffi cap1xxx RPi.GPIO
