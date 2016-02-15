@@ -58,7 +58,9 @@ RUN apt-get update && apt-get install -y \
   apt-utils python python-dev
 
 RUN pip install --upgrade pip
+
 RUN pip install smbus-cffi cap1xxx RPi.GPIO
+
 RUN curl -sS get.pimoroni.com/i2c | bash
 
 COPY . /app/
