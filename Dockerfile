@@ -56,7 +56,8 @@ ENV TERM dumb
 
 RUN apt-get update && apt-get install -y \
   curl \
-  build-essential
+  build-essential \
+  python-dev
 
 COPY ./pianohat.sh /pianohat.sh
 
