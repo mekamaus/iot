@@ -63,11 +63,13 @@ RUN apt-get update && apt-get install -y \
   python-smbus \
   i2c-tools
 
-RUN echo "i2c-bcm2708" >> /etc/modules \
-  && echo "i2c-dev" >> /etc/modules
+RUN ls /etc
+RUN ls /etc/modprobe.d
+RUN cat /etc/modprobe.d/raspi-blacklist.conf
 
-RUN echo "dtparam=i2c1=on" >> /boot/config.txt \
-  && echo "dtparam=i2c_arm=on" >> /boot/config.txt
+RUN printf "\ni2c-bcm2708\ni2c-dev" >> /etc/modules
+
+RUN printf "\ndtparam=i2c1=on\ndtparam=i2c_arm=on" >> /boot/config.txt
 
 RUN pip install --upgrade pip && pip install pianohat
 
