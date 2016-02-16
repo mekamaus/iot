@@ -63,7 +63,8 @@ RUN apt-get update && apt-get install -y \
   python-smbus \
   i2c-tools
 
-RUN cat /etc/modules
+RUN echo "i2c-bcm2708" >> /etc/modules \
+  && echo "i2c-dev" >> /etc/modules
 
 RUN pip install --upgrade pip && pip install pianohat
 
