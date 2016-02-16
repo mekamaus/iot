@@ -60,7 +60,10 @@ RUN apt-get update && apt-get install -y \
   python-dev \
   git \
   python-pip \
-  python-smbus
+  python-smbus \
+  i2c-tools
+
+RUN cat /etc/modules
 
 RUN pip install --upgrade pip && pip install pianohat
 
