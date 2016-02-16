@@ -1,74 +1,16 @@
 #!/bin/bash
 
-: <<'DISCLAIMER'
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-This script is licensed under the terms of the MIT license.
-Unless otherwise noted, code reproduced herein
-was written for this script.
-
-- The Pimoroni Crew -
-
-DISCLAIMER
-
 productname="Piano HAT" # the name of the product to install
 scriptname="pianohat" # the name of this script
-forcesudo="no" # whether the script requires to be ran with root privileges
-promptreboot="no" # whether the script should always prompt user to reboot
-customcmd="no" # whether to execute commands specified before exit
-jessiesupport="yes" # whether Jessie is supported or not
-wheezysupport="yes" # whether Wheezy is supported or not
-piplibname="pianohat" # the name of the lib in pip repo
 localdir="pianohat" # the name of the dir for copy of examples
 gitreponame="piano-hat" # the name of the git project repo
-gitrepoclone="no" # whether the git repo is to be cloned locally
 docdir="$gitreponame/documentation" # subdirectory of examples in repo
 examplesdir="$gitreponame/examples" # subdirectory of examples in repo
-i2creq="yes" # whether i2c is required or not
-spireq="no" # whether spi is required or not
-pkgdeplist=( "git" "python-pip" "python-smbus" ) # list of all the mandatory apt dependencies
-moreaptdep=( "python-numpy" "python-pygame" ) # list of all the additional apt dependencies
-morepipdep=() # list of all the additional pip dependencies
 
-ASK_TO_REBOOT=false
-CONFIG=/boot/config.txt
-BLACKLIST=/etc/modprobe.d/raspi-blacklist.conf
-LOADMOD=/etc/modules
-DEVICE_TREE=true
-UPDATE_DB=false
-
-sudocheck() {
-    if [ $(id -u) -ne 0 ]; then
-        printf "Install must be run as root. Try 'sudo ./$scriptname'\n"
-        exit 1
-    fi
-}
-
-sysclean() {
-    sudo apt-get clean
-}
-
-sysupdate() {
-    sudo apt-get update
-}
-
-sysupdgrade() {
-    sudo apt-get update && sudo apt-get upgrade
-    sudo apt-get clean && sudo apt-get autoclean
-}
-
-sysreboot() {
-    sync
-    sudo reboot
-}
+# CONFIG=/boot/config.txt
+# BLACKLIST=/etc/modprobe.d/raspi-blacklist.conf
+# LOADMOD=/etc/modules
+# DEVICE_TREE=true
 
 success() {
     echo "$(tput setaf 2)$1$(tput sgr0)"
@@ -76,30 +18,6 @@ success() {
 
 warning() {
     echo "$(tput setaf 1)$1$(tput sgr0)"
-}
-
-apt_pkg_req() {
-    APT_CHK=$(dpkg-query -W --showformat='${Status}\n' $1|grep "install ok installed")
-
-    if [ "" == "$APT_CHK" ]; then
-        true
-    else
-        false
-    fi
-}
-
-apt_pkg_install() {
-    \curl -sS get.pimoroni.com/package | bash -s - $1 || { warning "Sorry, Apt failed to install $1, I can't continue!" && exit; }
-}
-
-pip_pkg_req() {
-    PIP_CHK=$(pip search $1 | grep INSTALLED)
-
-    if [ "" == "$PIP_CHK" ]; then
-        true
-    else
-        false
-    fi
 }
 
 raspbian_check() {
@@ -112,122 +30,10 @@ raspbian_check() {
     fi
 }
 
-raspbian_old() {
-    DIST_CHK=$(cat /etc/os-release | grep "wheezy")
-
-    if [ "" == "$DIST_CHK" ];then
-        false
-    else
-        true
-    fi
-}
-
 if ! raspbian_check; then
     warning "Warning!"
     echo "Please only run this script on Raspbian on your Raspberry Pi"
     exit 1
-fi
-
-if [ $wheezysupport == "no" ]; then
-    if raspbian_old; then
-        echo ""
-        warning "--- Warning ---"
-        echo ""
-        echo "The $productname installer"
-        echo "does not work on Raspbian Wheezy."
-        echo "Check https://github.com/pimoroni/$gitreponame"
-        echo "for additional information and support"
-        echo ""
-        exit 1
-    fi
-fi
-
-if [ $forcesudo == "yes" ]; then
-    sudocheck
-fi
-
-echo ""
-echo "This script will install everything needed to use"
-echo "$productname"
-echo ""
-warning "--- Warning ---"
-echo ""
-echo "Always be careful when running scripts and commands"
-echo "copied from the internet. Ensure they are from a"
-echo "trusted source."
-echo ""
-echo "If you want to see what this script does before"
-echo "running it, you should run:"
-echo "    \curl -sS get.pimoroni.com/$scriptname"
-echo ""
-echo "Checking hardware requirements..."
-
-if [ $spireq == "yes" ]; then
-    echo ""
-    \curl -sS get.pimoroni.com/spi | sudo bash -s - "-y"
-fi
-
-if [ $i2creq == "yes" ]; then
-    echo ""
-    \curl -sS get.pimoroni.com/i2c | sudo bash -s - "-y"
-fi
-
-echo ""
-echo "Checking install requirements..."
-
-for pkgdep in ${pkgdeplist[@]}
-    do if apt_pkg_req "$pkgdep" ; then
-        UPDATE_DB=true
-    fi
-    done
-for morepkgdep in ${moreaptdep[@]}
-    do if apt_pkg_req "$morepkgdep" ; then
-        UPDATE_DB=true
-    fi
-    done
-
-if $UPDATE_DB ; then
-    echo ""
-    echo "Updating package indexes..."
-    sysupdate
-
-    echo ""
-    echo "Installing hardware requirements..."
-
-    for pkgdep in ${pkgdeplist[@]}
-        do echo "Checking for dependencies..."
-        if apt_pkg_req "$pkgdep" ; then
-            apt_pkg_install "$pkgdep"
-        fi
-        done
-else
-    success "Found!"
-fi
-
-if [ $piplibname != "na" ]; then
-
-    echo ""
-    echo "Checking for Python 2 library..."
-
-    if pip_pkg_req "$piplibname"; then
-        echo "Installing $productname library for Python 2..."
-        echo ""
-        if ! sudo pip install $piplibname; then
-            warning "Python 2 library install failed!"
-            echo "If problems persist, visit forums.pimoroni.com for support"
-            exit
-        fi
-        success "Done!"
-    else
-        success "Found!"
-        echo ""
-        if ! sudo pip install $piplibname -I; then
-            warning "Python 2 library install failed!"
-            echo "If problems persist, visit forums.pimoroni.com for support"
-        exit
-        fi
-        success "Done!"
-    fi
 fi
 
 if [ $EUID -ne 0 ]; then
@@ -269,73 +75,4 @@ if [ examplesdir != "na" ]; then
         warning "I backed up the examples to $localdir-backup, just in case you've changed anything!"
         success "Examples copied to $WORKING_DIR/$localdir/"
     fi
-fi
-
-echo ""
-echo "Checking additional software requirements..."
-
-moredepreq=false
-
-for moredep in ${moreaptdep[@]}
-    do if apt_pkg_req "$moredep" ; then
-        moredepreq=true
-    fi
-    done
-for moredep in ${morepipdep[@]}
-    do if pip_pkg_req "$moredep" ; then
-        moredepreq=true
-    fi
-    done
-
-if $moredepreq ; then
-    echo ""
-    echo "Some $productname examples/plugins"
-    echo "require additional software and/or modules"
-    for moredep in ${moreaptdep[@]}
-        do if apt_pkg_req "$moredep" ; then
-            apt_pkg_install "$moredep"
-        fi
-        done
-    for moredep in ${morepipdep[@]}
-        do if pip_pkg_req "$moredep" ; then
-            sudo pip install "$moredep"
-        fi
-        done
-else
-    success "Found!"
-fi
-
-if [ $gitrepoclone == "yes" ]; then
-    if ! [ -d $WORKING_DIR/$localdir ]; then
-        mkdir $WORKING_DIR/$localdir
-    fi
-    cd $WORKING_DIR/$localdir
-    if ! [ -d $WORKING_DIR/$localdir/$gitreponame ]; then
-        echo ""
-        echo "Cloning Github repo locally..."
-        git clone https://github.com/pimoroni/$gitreponame
-    else
-        cd $WORKING_DIR/$localdir/$gitreponame
-        echo ""
-        echo "Github repo already present. Updating..."
-        git pull
-    fi
-fi
-
-if [ $customcmd == "no" ]; then
-    sysclean
-    echo ""
-    success "All done!"
-    echo ""
-    echo "Enjoy your new $productname!"
-    echo ""
-else
-    echo ""
-    echo "Finalising Install..."
-    # place all custom commands in this scope
-    echo ""
-fi
-
-if [ $promptreboot == "yes" ] || $ASK_TO_REBOOT; then
-    sysreboot
 fi

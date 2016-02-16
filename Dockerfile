@@ -57,7 +57,12 @@ ENV TERM dumb
 RUN apt-get update && apt-get install -y \
   curl \
   build-essential \
-  python-dev
+  python-dev \
+  git \
+  python-pip \
+  python-smbus
+
+RUN pip install --upgrade pip && pip install pianohat
 
 COPY ./pianohat.sh /pianohat.sh
 
@@ -65,12 +70,14 @@ RUN chmod +x ./pianohat.sh
 
 RUN ./pianohat.sh -y
 
+RUN apt-get clean
+
 # RUN pip install --upgrade pip
-#
+
 # RUN pip install smbus-cffi cap1xxx RPi.GPIO
-#
-# RUN curl -sS get.pimoroni.com/i2c | bash
-#
-# COPY . /app/
-#
-# CMD ["python", "/app/main.py"]
+
+RUN curl -sS get.pimoroni.com/i2c | bash -s - "-y"
+
+COPY . /app/
+
+CMD ["python", "/app/main.py"]
