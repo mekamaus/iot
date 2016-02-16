@@ -54,6 +54,8 @@ FROM resin/rpi-raspbian
 
 ENV TERM dumb
 
+RUN apt-get upgrade && apt-get install -y curl
+
 COPY ./pianohat.sh /pianohat.sh
 
 RUN chmod +x ./pianohat.sh
