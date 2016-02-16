@@ -42,37 +42,37 @@ else
     USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
 fi
 
-WORKING_DIR=$USER_HOME/Pimoroni
-
-if ! [ -d $WORKING_DIR ]; then
-        mkdir $WORKING_DIR
-fi
-
-if [ examplesdir != "na" ]; then
-
-    if ! [ -d $WORKING_DIR/$localdir ]; then
-        echo ""
-        echo "Downloading $productname examples..."
-        export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
-        cd $TMPDIR
-        git clone https://github.com/pimoroni/$gitreponame
-        cd $WORKING_DIR
-        mkdir $localdir
-        cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
-        rm -rf $TMPDIR
-        success "Examples copied to $WORKING_DIR/$localdir/"
-    else
-        echo ""
-        mv $WORKING_DIR/$localdir $WORKING_DIR/$localdir-backup
-        echo "Updating $productname examples..."
-        export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
-        cd $TMPDIR
-        git clone https://github.com/pimoroni/$gitreponame
-        cd $WORKING_DIR
-        mkdir $localdir
-        cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
-        rm -rf $TMPDIR
-        warning "I backed up the examples to $localdir-backup, just in case you've changed anything!"
-        success "Examples copied to $WORKING_DIR/$localdir/"
-    fi
-fi
+# WORKING_DIR=$USER_HOME/Pimoroni
+#
+# if ! [ -d $WORKING_DIR ]; then
+#         mkdir $WORKING_DIR
+# fi
+#
+# if [ examplesdir != "na" ]; then
+#
+#     if ! [ -d $WORKING_DIR/$localdir ]; then
+#         echo ""
+#         echo "Downloading $productname examples..."
+#         export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
+#         cd $TMPDIR
+#         git clone https://github.com/pimoroni/$gitreponame
+#         cd $WORKING_DIR
+#         mkdir $localdir
+#         cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
+#         rm -rf $TMPDIR
+#         success "Examples copied to $WORKING_DIR/$localdir/"
+#     else
+#         echo ""
+#         mv $WORKING_DIR/$localdir $WORKING_DIR/$localdir-backup
+#         echo "Updating $productname examples..."
+#         export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
+#         cd $TMPDIR
+#         git clone https://github.com/pimoroni/$gitreponame
+#         cd $WORKING_DIR
+#         mkdir $localdir
+#         cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
+#         rm -rf $TMPDIR
+#         warning "I backed up the examples to $localdir-backup, just in case you've changed anything!"
+#         success "Examples copied to $WORKING_DIR/$localdir/"
+#     fi
+# fi
