@@ -52,7 +52,11 @@
 
 FROM resin/rpi-raspbian
 
-RUN apt-get update && apt-get install -y curl
+ENV TERM dumb
+
+COPY ./pianohat.sh /pianohat.sh
+
+RUN ./pianohat.sh -y
 
 # RUN pip install --upgrade pip
 #
@@ -63,5 +67,3 @@ RUN apt-get update && apt-get install -y curl
 # COPY . /app/
 #
 # CMD ["python", "/app/main.py"]
-
-RUN curl -sSL get.pimoroni.com/pianohat | bash /dev/stdin -y
