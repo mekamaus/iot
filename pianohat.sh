@@ -27,8 +27,6 @@ customcmd="no" # whether to execute commands specified before exit
 jessiesupport="yes" # whether Jessie is supported or not
 wheezysupport="yes" # whether Wheezy is supported or not
 piplibname="pianohat" # the name of the lib in pip repo
-pip2support="yes" # whether python2 is supported or not
-pip3support="yes" # whether python3 is supported or not
 localdir="pianohat" # the name of the dir for copy of examples
 gitreponame="piano-hat" # the name of the git project repo
 gitrepoclone="no" # whether the git repo is to be cloned locally
@@ -36,8 +34,8 @@ docdir="$gitreponame/documentation" # subdirectory of examples in repo
 examplesdir="$gitreponame/examples" # subdirectory of examples in repo
 i2creq="yes" # whether i2c is required or not
 spireq="no" # whether spi is required or not
-pkgdeplist=( "git" "python-pip" "python-smbus" "python3-pip" "python3-smbus" ) # list of all the mandatory apt dependencies
-moreaptdep=( "python-numpy" "python3-numpy" "python-pygame" "python3-pygame" ) # list of all the additional apt dependencies
+pkgdeplist=( "git" "python-pip" "python-smbus" ) # list of all the mandatory apt dependencies
+moreaptdep=( "python-numpy" "python-pygame" ) # list of all the additional apt dependencies
 morepipdep=() # list of all the additional pip dependencies
 
 FORCE=$1
@@ -113,25 +111,6 @@ apt_pkg_install() {
 
 pip_pkg_req() {
     PIP_CHK=$(pip search $1 | grep INSTALLED)
-
-    if [ "" == "$PIP_CHK" ]; then
-        true
-    else
-        false
-    fi
-}
-
-pip_chk_pip3() {
-    if [ -e /usr/bin/pip3  ]; then
-        PIP3_BIN="pip3"
-    else
-        PIP3_BIN="pip-3.2"
-    fi
-}
-
-pip_pkg_req3() {
-    pip_chk_pip3
-    PIP_CHK=$($PIP3_BIN search $1 | grep INSTALLED)
 
     if [ "" == "$PIP_CHK" ]; then
         true
@@ -252,60 +231,29 @@ if confirm "Do you wish to continue?"; then
 
     if [ $piplibname != "na" ]; then
 
-        if [ $pip2support == "yes" ]; then
-            echo ""
-            echo "Checking for Python 2 library..."
+        echo ""
+        echo "Checking for Python 2 library..."
 
-            if pip_pkg_req "$piplibname"; then
-                echo "Installing $productname library for Python 2..."
-                echo ""
-                if ! sudo pip install $piplibname; then
+        if pip_pkg_req "$piplibname"; then
+            echo "Installing $productname library for Python 2..."
+            echo ""
+            if ! sudo pip install $piplibname; then
+                warning "Python 2 library install failed!"
+                echo "If problems persist, visit forums.pimoroni.com for support"
+                exit
+            fi
+            success "Done!"
+        else
+            success "Found!"
+            echo ""
+            if confirm "Python 2 module found. Reinstall/Update?"; then
+                if ! sudo pip install $piplibname -I; then
                     warning "Python 2 library install failed!"
                     echo "If problems persist, visit forums.pimoroni.com for support"
-                    exit
+                exit
                 fi
                 success "Done!"
-            else
-                success "Found!"
-                echo ""
-                if confirm "Python 2 module found. Reinstall/Update?"; then
-                    if ! sudo pip install $piplibname -I; then
-                        warning "Python 2 library install failed!"
-                        echo "If problems persist, visit forums.pimoroni.com for support"
-                    exit
-                    fi
-                    success "Done!"
-                fi
             fi
-        else
-            echo "Note: $productname currently supports Python 3 only."
-        fi
-
-        if [ $pip3support == "yes" ]; then
-            echo ""
-            echo "Checking for Python 3 library..."
-            if pip_pkg_req3 "$piplibname"; then
-                echo "Installing $productname library for Python 3..."
-                echo ""
-                pip_chk_pip3
-                if ! sudo $PIP3_BIN install $piplibname; then
-                    warning "Python 3 library install failed!"
-                    echo "If problems persist, visit forums.pimoroni.com for support"
-                    exit
-                fi
-            else
-                success "Found!"
-                echo ""
-                if confirm "Python 3 module found. Reinstall/Update?"; then
-                    pip_chk_pip3
-                    if ! sudo $PIP3_BIN install $piplibname -I; then
-                        warning "Python 3 library install failed!"
-                        exit
-                    fi
-                fi
-            fi
-        else
-            echo "Note: $productname currently supports Python 2 only."
         fi
     fi
 
@@ -381,7 +329,6 @@ if confirm "Do you wish to continue?"; then
             for moredep in ${morepipdep[@]}
                 do if pip_pkg_req "$moredep" ; then
                     sudo pip install "$moredep"
-                    sudo $PIP3_BIN install "$moredep"
                 fi
                 done
         fi
@@ -412,12 +359,6 @@ if confirm "Do you wish to continue?"; then
         success "All done!"
         echo ""
         echo "Enjoy your new $productname!"
-        if [ $pip3support == "no" ]; then
-            echo "Note: $productname currently supports Python 2 only."
-        fi
-        if [ $pip2support == "no" ]; then
-            echo "Note: $productname currently supports Python 3 only."
-        fi
         echo ""
     else
         echo ""
@@ -434,5 +375,3 @@ else
     echo "Aborting..."
     echo ""
 fi
-
-#based on template 1602022200
