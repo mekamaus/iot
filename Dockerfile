@@ -69,11 +69,11 @@ RUN printf "\ndtparam=i2c1=on\ndtparam=i2c_arm=on\ndtparam=spi=on" >> /boot/conf
 
 RUN pip install --upgrade pip && pip install pianohat
 
-COPY ./pianohat.sh /pianohat.sh
-
-RUN chmod +x ./pianohat.sh
-
-RUN ./pianohat.sh -y
+# COPY ./pianohat.sh /pianohat.sh
+#
+# RUN chmod +x ./pianohat.sh
+#
+# RUN ./pianohat.sh -y
 
 RUN apt-get clean
 
@@ -81,7 +81,7 @@ RUN apt-get clean
 
 # RUN pip install smbus-cffi cap1xxx RPi.GPIO
 
-#RUN curl -sS get.pimoroni.com/i2c | bash -s - "-y"
+RUN curl -sS get.pimoroni.com/i2c | bash -s - "-y"
 
 RUN i2cdetect -y 1
 
