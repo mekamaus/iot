@@ -56,6 +56,8 @@ ENV TERM dumb
 
 COPY ./pianohat.sh /pianohat.sh
 
+RUN chmod +x ./pianohat.sh
+
 RUN ./pianohat.sh -y
 
 # RUN pip install --upgrade pip
