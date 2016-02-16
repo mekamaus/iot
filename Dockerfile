@@ -63,7 +63,6 @@ RUN apt-get update && apt-get install -y \
   python-smbus \
   i2c-tools
 
-RUN ls /etc
 RUN ls /etc/modprobe.d
 RUN cat /etc/modprobe.d/raspi-blacklist.conf
 
