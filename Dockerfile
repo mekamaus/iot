@@ -54,7 +54,9 @@ FROM resin/rpi-raspbian
 
 ENV TERM dumb
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y \
+  curl \
+  build-essential
 
 COPY ./pianohat.sh /pianohat.sh
 

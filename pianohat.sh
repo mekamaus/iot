@@ -38,27 +38,12 @@ pkgdeplist=( "git" "python-pip" "python-smbus" ) # list of all the mandatory apt
 moreaptdep=( "python-numpy" "python-pygame" ) # list of all the additional apt dependencies
 morepipdep=() # list of all the additional pip dependencies
 
-FORCE=$1
 ASK_TO_REBOOT=false
 CONFIG=/boot/config.txt
 BLACKLIST=/etc/modprobe.d/raspi-blacklist.conf
 LOADMOD=/etc/modules
 DEVICE_TREE=true
 UPDATE_DB=false
-
-confirm() {
-    if [ "$FORCE" == '-y' ]; then
-        true
-    else
-        read -r -p "$1 [y/N] " response < /dev/tty
-        response=${response,,}
-        if [[ $response =~ ^(yes|y)$ ]]; then
-            true
-        else
-            false
-        fi
-    fi
-}
 
 sudocheck() {
     if [ $(id -u) -ne 0 ]; then
@@ -81,10 +66,8 @@ sysupdgrade() {
 }
 
 sysreboot() {
-    if confirm "Would you like to reboot now?"; then
-        sync
-        sudo reboot
-    fi
+    sync
+    sudo reboot
 }
 
 success() {
@@ -177,201 +160,182 @@ echo "If you want to see what this script does before"
 echo "running it, you should run:"
 echo "    \curl -sS get.pimoroni.com/$scriptname"
 echo ""
+echo "Checking hardware requirements..."
 
-if confirm "Do you wish to continue?"; then
+if [ $spireq == "yes" ]; then
+    echo ""
+    \curl -sS get.pimoroni.com/spi | sudo bash -s - "-y"
+fi
+
+if [ $i2creq == "yes" ]; then
+    echo ""
+    \curl -sS get.pimoroni.com/i2c | sudo bash -s - "-y"
+fi
+
+echo ""
+echo "Checking install requirements..."
+
+for pkgdep in ${pkgdeplist[@]}
+    do if apt_pkg_req "$pkgdep" ; then
+        UPDATE_DB=true
+    fi
+    done
+for morepkgdep in ${moreaptdep[@]}
+    do if apt_pkg_req "$morepkgdep" ; then
+        UPDATE_DB=true
+    fi
+    done
+
+if $UPDATE_DB ; then
+    echo ""
+    echo "Updating package indexes..."
+    sysupdate
 
     echo ""
-    echo "Checking hardware requirements..."
-
-    if [ $spireq == "yes" ]; then
-        echo ""
-        if confirm "Hardware requires SPI, enable now?"; then
-            \curl -sS get.pimoroni.com/spi | sudo bash -s - "-y"
-        fi
-    fi
-
-    if [ $i2creq == "yes" ]; then
-        echo ""
-        if confirm "Hardware requires I2C, enable now?"; then
-            \curl -sS get.pimoroni.com/i2c | sudo bash -s - "-y"
-        fi
-    fi
-
-    echo ""
-    echo "Checking install requirements..."
+    echo "Installing hardware requirements..."
 
     for pkgdep in ${pkgdeplist[@]}
-        do if apt_pkg_req "$pkgdep" ; then
-            UPDATE_DB=true
+        do echo "Checking for dependencies..."
+        if apt_pkg_req "$pkgdep" ; then
+            apt_pkg_install "$pkgdep"
         fi
         done
-    for morepkgdep in ${moreaptdep[@]}
-        do if apt_pkg_req "$morepkgdep" ; then
-            UPDATE_DB=true
-        fi
-        done
+else
+    success "Found!"
+fi
 
-    if $UPDATE_DB ; then
-        echo ""
-        echo "Updating package indexes..."
-        sysupdate
-
-        echo ""
-        echo "Installing hardware requirements..."
-
-        for pkgdep in ${pkgdeplist[@]}
-            do echo "Checking for dependencies..."
-            if apt_pkg_req "$pkgdep" ; then
-                apt_pkg_install "$pkgdep"
-            fi
-            done
-    else
-        success "Found!"
-    fi
-
-    if [ $piplibname != "na" ]; then
-
-        echo ""
-        echo "Checking for Python 2 library..."
-
-        if pip_pkg_req "$piplibname"; then
-            echo "Installing $productname library for Python 2..."
-            echo ""
-            if ! sudo pip install $piplibname; then
-                warning "Python 2 library install failed!"
-                echo "If problems persist, visit forums.pimoroni.com for support"
-                exit
-            fi
-            success "Done!"
-        else
-            success "Found!"
-            echo ""
-            if confirm "Python 2 module found. Reinstall/Update?"; then
-                if ! sudo pip install $piplibname -I; then
-                    warning "Python 2 library install failed!"
-                    echo "If problems persist, visit forums.pimoroni.com for support"
-                exit
-                fi
-                success "Done!"
-            fi
-        fi
-    fi
-
-    if [ $EUID -ne 0 ]; then
-        USER_HOME=$(getent passwd $USER | cut -d: -f6)
-    else
-        USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
-    fi
-
-    WORKING_DIR=$USER_HOME/Pimoroni
-
-    if ! [ -d $WORKING_DIR ]; then
-            mkdir $WORKING_DIR
-    fi
-
-    if [ examplesdir != "na" ]; then
-
-        if ! [ -d $WORKING_DIR/$localdir ]; then
-            echo ""
-            echo "Downloading $productname examples..."
-            export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
-            cd $TMPDIR
-            git clone https://github.com/pimoroni/$gitreponame
-            cd $WORKING_DIR
-            mkdir $localdir
-            cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
-            rm -rf $TMPDIR
-            success "Examples copied to $WORKING_DIR/$localdir/"
-        else
-            echo ""
-            if confirm "Examples already exist, shall I replace them?"; then
-                mv $WORKING_DIR/$localdir $WORKING_DIR/$localdir-backup
-                echo "Updating $productname examples..."
-                export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
-                cd $TMPDIR
-                git clone https://github.com/pimoroni/$gitreponame
-                cd $WORKING_DIR
-                mkdir $localdir
-                cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
-                rm -rf $TMPDIR
-                warning "I backed up the examples to $localdir-backup, just in case you've changed anything!"
-                success "Examples copied to $WORKING_DIR/$localdir/"
-            fi
-        fi
-    fi
+if [ $piplibname != "na" ]; then
 
     echo ""
-    echo "Checking additional software requirements..."
+    echo "Checking for Python 2 library..."
 
-    moredepreq=false
+    if pip_pkg_req "$piplibname"; then
+        echo "Installing $productname library for Python 2..."
+        echo ""
+        if ! sudo pip install $piplibname; then
+            warning "Python 2 library install failed!"
+            echo "If problems persist, visit forums.pimoroni.com for support"
+            exit
+        fi
+        success "Done!"
+    else
+        success "Found!"
+        echo ""
+        if ! sudo pip install $piplibname -I; then
+            warning "Python 2 library install failed!"
+            echo "If problems persist, visit forums.pimoroni.com for support"
+        exit
+        fi
+        success "Done!"
+    fi
+fi
 
+if [ $EUID -ne 0 ]; then
+    USER_HOME=$(getent passwd $USER | cut -d: -f6)
+else
+    USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
+fi
+
+WORKING_DIR=$USER_HOME/Pimoroni
+
+if ! [ -d $WORKING_DIR ]; then
+        mkdir $WORKING_DIR
+fi
+
+if [ examplesdir != "na" ]; then
+
+    if ! [ -d $WORKING_DIR/$localdir ]; then
+        echo ""
+        echo "Downloading $productname examples..."
+        export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
+        cd $TMPDIR
+        git clone https://github.com/pimoroni/$gitreponame
+        cd $WORKING_DIR
+        mkdir $localdir
+        cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
+        rm -rf $TMPDIR
+        success "Examples copied to $WORKING_DIR/$localdir/"
+    else
+        echo ""
+        mv $WORKING_DIR/$localdir $WORKING_DIR/$localdir-backup
+        echo "Updating $productname examples..."
+        export TMPDIR=`mktemp -d /tmp/pimoroni.XXXXXX`
+        cd $TMPDIR
+        git clone https://github.com/pimoroni/$gitreponame
+        cd $WORKING_DIR
+        mkdir $localdir
+        cp -R $TMPDIR/$examplesdir/* $WORKING_DIR/$localdir/
+        rm -rf $TMPDIR
+        warning "I backed up the examples to $localdir-backup, just in case you've changed anything!"
+        success "Examples copied to $WORKING_DIR/$localdir/"
+    fi
+fi
+
+echo ""
+echo "Checking additional software requirements..."
+
+moredepreq=false
+
+for moredep in ${moreaptdep[@]}
+    do if apt_pkg_req "$moredep" ; then
+        moredepreq=true
+    fi
+    done
+for moredep in ${morepipdep[@]}
+    do if pip_pkg_req "$moredep" ; then
+        moredepreq=true
+    fi
+    done
+
+if $moredepreq ; then
+    echo ""
+    echo "Some $productname examples/plugins"
+    echo "require additional software and/or modules"
     for moredep in ${moreaptdep[@]}
         do if apt_pkg_req "$moredep" ; then
-            moredepreq=true
+            apt_pkg_install "$moredep"
         fi
         done
     for moredep in ${morepipdep[@]}
         do if pip_pkg_req "$moredep" ; then
-            moredepreq=true
+            sudo pip install "$moredep"
         fi
         done
+else
+    success "Found!"
+fi
 
-    if $moredepreq ; then
+if [ $gitrepoclone == "yes" ]; then
+    if ! [ -d $WORKING_DIR/$localdir ]; then
+        mkdir $WORKING_DIR/$localdir
+    fi
+    cd $WORKING_DIR/$localdir
+    if ! [ -d $WORKING_DIR/$localdir/$gitreponame ]; then
         echo ""
-        echo "Some $productname examples/plugins"
-        echo "require additional software and/or modules"
-        if confirm "Would you like to install them now?"; then
-            for moredep in ${moreaptdep[@]}
-                do if apt_pkg_req "$moredep" ; then
-                    apt_pkg_install "$moredep"
-                fi
-                done
-            for moredep in ${morepipdep[@]}
-                do if pip_pkg_req "$moredep" ; then
-                    sudo pip install "$moredep"
-                fi
-                done
-        fi
+        echo "Cloning Github repo locally..."
+        git clone https://github.com/pimoroni/$gitreponame
     else
-        success "Found!"
+        cd $WORKING_DIR/$localdir/$gitreponame
+        echo ""
+        echo "Github repo already present. Updating..."
+        git pull
     fi
+fi
 
-    if [ $gitrepoclone == "yes" ]; then
-        if ! [ -d $WORKING_DIR/$localdir ]; then
-            mkdir $WORKING_DIR/$localdir
-        fi
-        cd $WORKING_DIR/$localdir
-        if ! [ -d $WORKING_DIR/$localdir/$gitreponame ]; then
-            echo ""
-            echo "Cloning Github repo locally..."
-            git clone https://github.com/pimoroni/$gitreponame
-        else
-            cd $WORKING_DIR/$localdir/$gitreponame
-            echo ""
-            echo "Github repo already present. Updating..."
-            git pull
-        fi
-    fi
-
-    if [ $customcmd == "no" ]; then
-        sysclean
-        echo ""
-        success "All done!"
-        echo ""
-        echo "Enjoy your new $productname!"
-        echo ""
-    else
-        echo ""
-        echo "Finalising Install..."
-        # place all custom commands in this scope
-        echo ""
-    fi
-
-    if [ $promptreboot == "yes" ] || $ASK_TO_REBOOT; then
-        sysreboot
-    fi
+if [ $customcmd == "no" ]; then
+    sysclean
+    echo ""
+    success "All done!"
+    echo ""
+    echo "Enjoy your new $productname!"
+    echo ""
 else
     echo ""
-    echo "Aborting..."
+    echo "Finalising Install..."
+    # place all custom commands in this scope
     echo ""
+fi
+
+if [ $promptreboot == "yes" ] || $ASK_TO_REBOOT; then
+    sysreboot
 fi
