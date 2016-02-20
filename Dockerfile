@@ -65,7 +65,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN printf "\ni2c-bcm2708\ni2c-dev" >> /etc/modules
 
-RUN printf "\ndtparam=i2c1=on\ndtparam=i2c_arm=on\ndtparam=spi=on" >> /boot/config.txt
+RUN printf "\ndtparam=i2c1=on\ndtparam=i2c_arm=on" >> /boot/config.txt
 
 RUN pip install --upgrade pip && pip install pianohat
 
@@ -78,7 +78,7 @@ RUN pip install --upgrade pip && pip install pianohat
 RUN apt-get clean
 
 # RUN pip install --upgrade pip
-
+#
 # RUN pip install smbus-cffi cap1xxx RPi.GPIO
 
 RUN curl -sS get.pimoroni.com/i2c | bash -s - "-y"
