@@ -79,6 +79,8 @@ RUN pip install --upgrade pip && pip install pianohat
 
 RUN apt-get clean
 
+RUN depmod
+
 # RUN pip install --upgrade pip
 #
 # RUN pip install smbus-cffi cap1xxx RPi.GPIO
