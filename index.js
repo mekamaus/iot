@@ -123,7 +123,6 @@ var random = function (low, high) {
 
 var sense = {
   namefile: namefile,
-  prospects: prospects,
   hasNamefile: hasNamefile,
   isSenseHatMatrix: isSenseHatMatrix,
   devname: devname,
