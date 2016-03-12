@@ -36,15 +36,17 @@ glob('/sys/class/graphics/fb*', function (err, files) {
     .findFirst();
 
   var fb = null;
-  if (a.isPresent()) {
-    var led = devname(a.get());
-    console.log('Found framebuffer ' + led);
-    fb = led;
-  } else {
+
+  if (!a.isPresent()) {
     console.log(
       'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
     );
+    return;
   }
+
+  var led = devname(a.get());
+  console.log('Found framebuffer ' + led);
+  fb = led;
 
   console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
   for (var n = 1; --n >= 0;) {
