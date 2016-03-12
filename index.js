@@ -7,17 +7,18 @@ var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
 
-var hasNamefile = function (dir, cb) {
+var hasNamefile = function (dir) {
+  console.log('Checking directory: ' + dir);
   try {
     fs.accessSync(namefile(dir));
     return true;
   } catch (e) {
+    console.log('No namefile found');
     return false;
   }
 };
 
 var isSenseHatMatrix = function (dir) {
-  console.log('Checking directory: ' + dir);
   try {
     return fs.accessSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
   } catch (e) {
