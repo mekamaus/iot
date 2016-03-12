@@ -1,5 +1,5 @@
-var fsp = require('fs-promise');
-var glob = require('glob-promise');
+var fs = require('fs');
+var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
 
@@ -7,33 +7,41 @@ var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
 
-var hasNamefile = function (dir) {
-  return fsp.existsSync(namefile(dir));
+var hasNamefile = function (dir, cb) {
+  try {
+    fs.accessSync(namefile(dir));
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
 
 var isSenseHatMatrix = function (dir) {
-  return fsp.readFileSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
+  try {
+    return fs.accessSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
+  } catch (e) {
+    return false;
+  }
 };
 
 var devname = function (path) {
   return '/dev/' + path.split('/').reverse()[0];
 };
 
-glob('/sys/class/graphics/fb*')
-  .then(function (a) {
-    console.log('Found:', a);
-    var r = stream(a)
-      .filter(hasNamefile)
-      .filter(isSenseHatMatrix)
-      .findFirst();
-    return r;
-  });
+glob('/sys/class/graphics/fb*', function (err, files) {
+  console.log('Found:', files);
+  var r = stream(files)
+    .filter(hasNamefile)
+    .filter(isSenseHatMatrix)
+    .findFirst();
+  return r;
+});
 
 var unpack = function (n) {
   var r = (n & 0xF800) >> 11;
   var g = (n & 0x7E0) >> 5;
   var b = (n & 0x1F);
-  var rc = [ r << 3, g << 2, b << 3 ];
+  var rc = [r << 3, g << 2, b << 3];
   return rc;
 };
 
@@ -55,9 +63,9 @@ var getPixel = function (fb, x, y) {
   if (x < 0 || x > 7) throw new Error('x = ' + x + ' violates 0 <= x <= 7');
   if (y < 0 || y > 7) throw new Error('y = ' + y + ' violates 0 <= y <= 7');
 
-  var fd = fsp.openSync(fb, 'r');
-  var buf = fsp.readFileSync(fd);
-  fsp.closeSync(fd);
+  var fd = fs.openSync(fb, 'r');
+  var buf = fs.readFileSync(fd);
+  fs.closeSync(fd);
   var n = buf.readUInt16LE(pos(x, y));
   return unpack(n);
 };
@@ -67,22 +75,23 @@ var setPixel = function (fb, x, y, rgb) {
   if (y < 0 || y > 7) throw new Error('y = ' + y + ' violates 0 <= y <= 7');
 
   rgb.map(function (col) {
-    if (col < 0 || col > 255) throw new Error('RGB color ' + rgb + ' violates [0, 0, 0] <= RGB <= [255, 255, 255]');
+    if (col < 0 || col > 255) throw new Error('RGB color ' + rgb +
+      ' violates [0, 0, 0] <= RGB <= [255, 255, 255]');
     return col;
   });
-  var fd = fsp.openSync(fb, 'w');
+  var fd = fs.openSync(fb, 'w');
   var buf = new Buffer(2);
   var n = pack(rgb);
   buf.writeUInt16LE(n);
-  fsp.writeSync(fd, buf, 0, buf.length, pos(x, y), function (error, written, _) {
+  fs.writeSync(fd, buf, 0, buf.length, pos(x, y), function (error, written, _) {
     console.log('Wrote ' + written + ' bytes');
   });
-  fsp.closeSync(fd);
+  fs.closeSync(fd);
 };
 
 var clear = function (fb) {
-  for (var y = 8; --y >= 0; ) {
-    for (var x = 8; --x >= 0; ) {
+  for (var y = 8; --y >= 0;) {
+    for (var x = 8; --x >= 0;) {
       setPixel(fb, x, y, [0, 0, 0]);
     }
   }
@@ -94,7 +103,9 @@ var rc = fb.then(function (a) {
     console.log('Found framebuffer ' + led);
     return led;
   } else {
-    console.log('Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?');
+    console.log(
+      'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
+    );
     return null;
   }
 });
@@ -105,9 +116,9 @@ var random = function (low, high) {
 
 var rrc = rc.then(function (fb) {
   console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
-  for (var n = 1; --n >= 0; ) {
-    for (var y = 8; --y >= 0; ) {
-      for (var x = 8; --x >= 0; ) {
+  for (var n = 1; --n >= 0;) {
+    for (var y = 8; --y >= 0;) {
+      for (var x = 8; --x >= 0;) {
         setPixel(fb, x, y, [random(0, 255), random(0, 255), random(0, 255)]);
       }
     }
@@ -115,7 +126,7 @@ var rrc = rc.then(function (fb) {
   console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
 });
 
-var sense = module.exports = {
+var sense = {
   namefile: namefile,
   prospects: prospects,
   hasNamefile: hasNamefile,
