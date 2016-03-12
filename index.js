@@ -28,7 +28,7 @@ var devname = function (path) {
   return '/dev/' + path.split('/').reverse()[0];
 };
 
-glob('/sys/class/graphics/fb*', function (err, files) {
+var fb = glob('/sys/class/graphics/fb*', function (err, files) {
   console.log('Found:', files);
   var r = stream(files)
     .filter(hasNamefile)
