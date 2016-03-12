@@ -28,13 +28,33 @@ var devname = function (path) {
   return '/dev/' + path.split('/').reverse()[0];
 };
 
-var fb = glob('/sys/class/graphics/fb*', function (err, files) {
+glob('/sys/class/graphics/fb*', function (err, files) {
   console.log('Found:', files);
-  var r = stream(files)
+  var a = stream(files)
     .filter(hasNamefile)
     .filter(isSenseHatMatrix)
     .findFirst();
-  return r;
+
+  var fb = null;
+  if (a.isPresent()) {
+    var led = devname(a.get());
+    console.log('Found framebuffer ' + led);
+    fb = led;
+  } else {
+    console.log(
+      'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
+    );
+  }
+
+  console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
+  for (var n = 1; --n >= 0;) {
+    for (var y = 8; --y >= 0;) {
+      for (var x = 8; --x >= 0;) {
+        setPixel(fb, x, y, [random(0, 255), random(0, 255), random(0, 255)]);
+      }
+    }
+  }
+  console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
 });
 
 var unpack = function (n) {
@@ -97,34 +117,9 @@ var clear = function (fb) {
   }
 };
 
-var rc = fb.then(function (a) {
-  if (a.isPresent()) {
-    var led = devname(a.get());
-    console.log('Found framebuffer ' + led);
-    return led;
-  } else {
-    console.log(
-      'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
-    );
-    return null;
-  }
-});
-
 var random = function (low, high) {
   return Math.floor(Math.random() * (high - low) + low);
 };
-
-var rrc = rc.then(function (fb) {
-  console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
-  for (var n = 1; --n >= 0;) {
-    for (var y = 8; --y >= 0;) {
-      for (var x = 8; --x >= 0;) {
-        setPixel(fb, x, y, [random(0, 255), random(0, 255), random(0, 255)]);
-      }
-    }
-  }
-  console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
-});
 
 var sense = {
   namefile: namefile,
@@ -132,16 +127,13 @@ var sense = {
   hasNamefile: hasNamefile,
   isSenseHatMatrix: isSenseHatMatrix,
   devname: devname,
-  fb: fb,
   unpack: unpack,
   pack: pack,
   pos: pos,
   getPixel: getPixel,
   setPixel: setPixel,
   clear: clear,
-  rc: rc,
-  random: random,
-  rrc: rrc
+  random: random
 };
 
 //sense.setPixel(fb, 0, 0, [0, 0, 0]);
