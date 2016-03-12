@@ -17,6 +17,7 @@ var hasNamefile = function (dir, cb) {
 };
 
 var isSenseHatMatrix = function (dir) {
+  console.log('Checking directory: ' + dir);
   try {
     return fs.accessSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
   } catch (e) {
@@ -29,7 +30,6 @@ var devname = function (path) {
 };
 
 glob('/sys/class/graphics/fb*', function (err, files) {
-  console.log('Found:', files);
   var a = stream(files)
     .filter(hasNamefile)
     .filter(isSenseHatMatrix)
