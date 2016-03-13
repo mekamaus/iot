@@ -3,17 +3,19 @@ var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
 
+fs.readdir('/dev/', function (err, contents) {
+  console.log('Devices', contents);
+});
+
 var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
 
 var hasNamefile = function (dir) {
-  console.log('Checking directory: ' + dir);
   try {
     fs.accessSync(namefile(dir));
     return true;
   } catch (e) {
-    console.log('No namefile found');
     return false;
   }
 };
@@ -36,8 +38,6 @@ glob('/sys/class/graphics/fb*', function (err, files) {
     .filter(isSenseHatMatrix)
     .findFirst();
 
-  var fb = null;
-
   if (!a.isPresent()) {
     console.log(
       'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
@@ -45,9 +45,8 @@ glob('/sys/class/graphics/fb*', function (err, files) {
     return;
   }
 
-  var led = devname(a.get());
-  console.log('Found framebuffer ' + led);
-  fb = led;
+  var fb = devname(a.get());
+  console.log('Found framebuffer ' + fb);
 
   console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
   for (var n = 1; --n >= 0;) {
