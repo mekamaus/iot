@@ -4,11 +4,8 @@ var path = require('path');
 var stream = require('streamjs');
 
 fs.readdir('/sys/class/graphics/fb0', function (err, contents) {
-  console.log('fb0 contents', contents);
-
-  fs.readdir('/sys/class/graphics/fb1', function (err, c) {
-    console.log('fb1 contents', c);
-  });
+  console.log('fb0 namefile:', fs.accessSync(namefile(dir)).toString().trim());
+  console.log('fb1 namefile:', fs.accessSync(namefile(dir)).toString().trim());
 });
 
 var namefile = function (framebuffer) {
