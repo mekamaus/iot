@@ -7,6 +7,7 @@ var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
 
+console.log('fs:', fs);
 console.log('fb0 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb0')).toString().trim());
 console.log('fb1 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb1')).toString().trim());
 
