@@ -3,13 +3,12 @@ var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
 
-console.log('fb0 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb0')).toString().trim());
-console.log('fb1 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb1')).toString().trim());
-
-
 var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
+
+console.log('fb0 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb0')).toString().trim());
+console.log('fb1 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb1')).toString().trim());
 
 var hasNamefile = function (dir) {
   try {
