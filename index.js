@@ -3,8 +3,12 @@ var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
 
-fs.readdir('/dev/', function (err, contents) {
-  console.log('Devices', contents);
+fs.readdir('/sys/class/graphics/fb0', function (err, contents) {
+  console.log('fb0 contents', contents);
+
+  fs.readdir('/sys/class/graphics/fb1', function (err, c) {
+    console.log('fb1 contents', c);
+  });
 });
 
 var namefile = function (framebuffer) {
