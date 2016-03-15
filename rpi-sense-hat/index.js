@@ -230,6 +230,6 @@ module.exports = {
     setRotation(fb, r);
   },
   get rotation() {
-    return r;
+    return rotation;
   }
 };
