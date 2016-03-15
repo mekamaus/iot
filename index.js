@@ -1,9 +1,9 @@
+var fsNative = require('fs');
+console.log(fsNative);
 var fs = require('fs-utils');
 var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
-
-console.log(fs);
 
 var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
