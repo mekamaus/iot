@@ -154,31 +154,10 @@ var rot90 = function (matrix) {
   return result;
 };
 
-var pixMap0 = [
-  [ 0,  1,  2,  3,  4,  5,  6,  7],
-  [ 8,  9, 10, 11, 12, 13, 14, 15],
-  [16, 17, 18, 19, 20, 21, 22, 23],
-  [24, 25, 26, 27, 28, 29, 30, 31],
-  [32, 33, 34, 35, 36, 37, 38, 39],
-  [40, 41, 42, 43, 44, 45, 46, 47],
-  [48, 49, 50, 51, 52, 53, 54, 55],
-  [56, 57, 58, 59, 60, 61, 62, 63]
-];
-var pixMap90 = rot90(pixMap0);
-var pixMap180 = rot90(pixMap90);
-var pixMap270 = rot90(pixMap180);
-
-var pixMap = {
-    0: pixMap0,
-   90: pixMap90,
-  180: pixMap180,
-  270: pixMap270
-};
-
 var rotation = 0;
 
 var setRotation = function (fb, r) {
-  if(pixMap[r] === undefined) {
+  if(r !== 0 && r !== 90 && r !== 180 && r !== 270) {
     throw RangeError('Rotation must be 0, 90, 180 or 270 degrees');
   }
   var pixels = getPixels(fb);
