@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/sadams9/iot#readme",
   "dependencies": {
+    "fs-utils": "^0.7.0",
     "glob": "^7.0.3",
     "path": "^0.12.7",
     "streamjs": "^1.6.4"

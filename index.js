@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('fs-utils');
 var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
@@ -8,8 +8,8 @@ var namefile = function (framebuffer) {
 };
 
 console.log('fs:', fs);
-console.log('fb0 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb0')).toString().trim());
-console.log('fb1 namefile:', fs.accessSync(namefile('/sys/class/graphics/fb1')).toString().trim());
+console.log('fb0 namefile:', fs.readFileSync(namefile('/sys/class/graphics/fb0')).toString().trim());
+console.log('fb1 namefile:', fs.readFileSync(namefile('/sys/class/graphics/fb1')).toString().trim());
 
 var hasNamefile = function (dir) {
   try {
