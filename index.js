@@ -1,5 +1,5 @@
 var sense = require('./rpi-sense-hat/index');
-var sleep = require('sleep').usleep;
+var sleep = require('sleep').sleep;
 
 var g = [0, 255, 0];
 var h = [0, 127, 0];
@@ -17,7 +17,7 @@ var pixels = [
 ];
 
 var t = 0;
-var dt = 100;
+var dt = 0.1;
 var w = 1.0 / (2 * Math.PI);
 while(true) {
   for (var y = 8; --y >= 0;) {
