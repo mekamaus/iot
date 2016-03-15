@@ -18,7 +18,7 @@ var pixels = [
 
 sense.setPixels(pixels);
 
-while (true) {
+/*while (true) {
   sleep(1);
   sense.rotation = (sense.rotation + 90) % 360;
-}
+}*/
