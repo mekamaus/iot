@@ -21,12 +21,12 @@ var pixels = [
 
 var t = 0;
 var dt = 0.02;
-var w = 1.0 / (2 * Math.PI);
+var w = 2 * Math.PI;
 while(true) {
   for (var y = 8; --y >= 0;) {
     for (var x = 8; --x >= 0;) {
       var dist2 = (x - 3.5) * (x - 3.5) + (y - 3.5) * (y - 3.5);
-      var intensity = Math.exp(-(0.2 + (0.15 * Math.cos(w * t))) * dist2);
+      var intensity = Math.exp(-(0.225 + (0.125 * Math.cos(w * t))) * dist2);
       var color = [0, 0, 0];
       if (intensity <= 0.5) {
         color = [
