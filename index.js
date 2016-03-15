@@ -19,31 +19,30 @@ var devname = function (path) {
   return '/dev/' + path.split('/').reverse()[0];
 };
 
-glob('/sys/class/graphics/fb*', function (err, files) {
-  var a = stream(files)
-    .filter(isSenseHatMatrix)
-    .findFirst();
+var files = glob.sync('/sys/class/graphics/fb*');
+var a = stream(files)
+  .filter(isSenseHatMatrix)
+  .findFirst();
 
-  if (!a.isPresent()) {
-    console.log(
-      'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
-    );
-    return;
-  }
+if (!a.isPresent()) {
+  console.error(
+    'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
+  );
+  return;
+}
 
-  var fb = devname(a.get());
-  console.log('Found framebuffer ' + fb);
+var fb = devname(a.get());
+console.log('Found framebuffer ' + fb);
 
-  console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
-  for (var n = 1; --n >= 0;) {
-    for (var y = 8; --y >= 0;) {
-      for (var x = 8; --x >= 0;) {
-        setPixel(fb, x, y, [random(0, 255), random(0, 255), random(0, 255)]);
-      }
+console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
+for (var n = 1; --n >= 0;) {
+  for (var y = 8; --y >= 0;) {
+    for (var x = 8; --x >= 0;) {
+      setPixel(fb, x, y, [random(0, 255), random(0, 255), random(0, 255)]);
     }
   }
-  console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
-});
+}
+console.log('Pixel (0,0) = ' + getPixel(fb, 0, 0));
 
 var unpack = function (n) {
   var r = (n & 0xF800) >> 11;
