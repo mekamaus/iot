@@ -88,7 +88,7 @@ var setPixel = function (fb, x, y, rgb) {
   var fd = fs.openSync(fb, 'w');
   var buf = new Buffer(2);
   var n = pack(rgb);
-  buf.writeUInt16LE(n);
+  buf.writeUInt16LE(n, 0);
   fs.writeSync(fd, buf, 0, buf.length, pos(x, y), function (error, written, _) {
     console.log('Wrote ' + written + ' bytes');
   });
