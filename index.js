@@ -1,5 +1,8 @@
 var sense = require('./rpi-sense-hat/index');
-var sleep = require('sleep').sleep;
+var usleep = require('sleep').usleep;
+var sleep = function (delay) {
+  usleep(delay * 1000000);
+};
 
 var g = [0, 255, 0];
 var h = [0, 127, 0];
