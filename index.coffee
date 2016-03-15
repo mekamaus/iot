@@ -26,6 +26,7 @@ colorFn = (x, y) =>
   color
 
 while true
-  sense.setPixels colorFn(x, y) for x in [0...8] for y in [0...8]
+  pixels = colorFn(x, y) for x in [0...8] for y in [0...8]
+  sense.setPixels pixels
   sleep dt
   t += dt
