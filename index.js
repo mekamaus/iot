@@ -1,4 +1,4 @@
-var sense = require('rpi-sense-hat/index');
+var sense = require('./rpi-sense-hat/index');
 var sleep = require('sleep').sleep;
 
 var g = [0, 255, 0];
