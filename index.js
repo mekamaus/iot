@@ -10,15 +10,15 @@ var pixels = [
   [e, e, h, g, g, h, e, e],
   [e, h, g, g, g, g, h, e],
   [h, g, g, g, g, g, g, h],
-  [e, e, e, g, g, e, e, e],
-  [e, e, e, g, g, e, e, e],
-  [e, e, e, g, g, e, e, e],
-  [e, e, e, g, g, e, e, e]
+  [e, e, g, g, g, g, e, e],
+  [e, e, g, g, g, g, e, e],
+  [e, e, g, g, g, g, e, e],
+  [e, e, g, g, g, g, e, e]
 ];
 
 sense.setPixels(pixels);
 
-/*while (true) {
+while (true) {
   sleep(1);
   sense.rotation = (sense.rotation + 90) % 360;
-}*/
+}
