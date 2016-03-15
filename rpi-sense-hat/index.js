@@ -74,6 +74,7 @@ var setPixels = function(fb, pixels) {
       var rgb = pixels[y][x];
       validateRGB(rgb);
       var n = pack(rgb);
+      buf.writeUInt16LE(n, 0);
       fs.writeSync(fd, buf, 0, buf.length, pos(x, y, rotation), function (err, n, _) {});
     }
   }
