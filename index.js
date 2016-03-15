@@ -18,7 +18,7 @@ var pixels = [
 
 var t = 0;
 var dt = 100;
-var w = 1.0;
+var w = 1.0 / (2 * Math.PI);
 while(true) {
   for (var y = 8; --y >= 0;) {
     for (var x = 8; --x >= 0;) {
