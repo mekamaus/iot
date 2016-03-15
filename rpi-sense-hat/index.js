@@ -165,7 +165,7 @@ var pixMap0 = [
 ];
 var pixMap90 = rot90(pixMap0);
 var pixMap180 = rot90(pixMap90);
-var pixMap270 = rot90(pixMap270);
+var pixMap270 = rot90(pixMap180);
 
 var pixMap = {
     0: pixMap0,
