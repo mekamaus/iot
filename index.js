@@ -7,22 +7,9 @@ var namefile = function (framebuffer) {
   return path.join(framebuffer, 'name');
 };
 
-console.log('fs:', fs);
-console.log('fb0 namefile:', fs.readFileSync(namefile('/sys/class/graphics/fb0')).toString().trim());
-console.log('fb1 namefile:', fs.readFileSync(namefile('/sys/class/graphics/fb1')).toString().trim());
-
-var hasNamefile = function (dir) {
-  try {
-    fs.accessSync(namefile(dir));
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
-
 var isSenseHatMatrix = function (dir) {
   try {
-    return fs.accessSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
+    return fs.readFileSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
   } catch (e) {
     return false;
   }
@@ -34,7 +21,6 @@ var devname = function (path) {
 
 glob('/sys/class/graphics/fb*', function (err, files) {
   var a = stream(files)
-    .filter(hasNamefile)
     .filter(isSenseHatMatrix)
     .findFirst();
 
