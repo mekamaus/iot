@@ -1,6 +1,4 @@
-var fsNative = require('fs');
-console.log(fsNative);
-var fs = require('fs-utils');
+var fs = require('fs');
 var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
@@ -73,8 +71,10 @@ var getPixel = function (fb, x, y) {
   if (x < 0 || x > 7) throw new Error('x = ' + x + ' violates 0 <= x <= 7');
   if (y < 0 || y > 7) throw new Error('y = ' + y + ' violates 0 <= y <= 7');
 
-  var buf = fs.readFileSync(fb);
+  var fd = fs.openSync(fb, 'r');
+  var buf = fs.readFileSync(fd);
   var n = buf.readUInt16LE(pos(x, y));
+  fs.closeSync(fd);
   return unpack(n);
 };
 
