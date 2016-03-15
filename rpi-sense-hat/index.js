@@ -35,7 +35,6 @@ if (!a.isPresent()) {
 }
 
 var fb = devname(a.get());
-console.log('Found framebuffer ' + fb);
 
 var pos = function(x, y, r) {
   if (r === 0) {
