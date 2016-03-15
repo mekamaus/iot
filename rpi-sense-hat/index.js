@@ -66,11 +66,17 @@ var validateRGB = function(rgb) {
 };
 
 var setPixels = function(fb, pixels) {
+  var pixelFn = null;
+  if (typeof pixels === 'function') {
+    pixelFn = pixels;
+  }
   var fd = fs.openSync(fb, 'w');
   var buf = new Buffer(2);
   for (var y = 8; --y >= 0;) {
     for (var x = 8; --x >= 0;) {
-      var rgb = pixels[y][x];
+      var rgb = pixelFn
+        ? pixelFn(x, y)
+        : pixels[y][x];
       validateRGB(rgb);
       var n = pack(rgb);
       buf.writeUInt16LE(n, 0);
