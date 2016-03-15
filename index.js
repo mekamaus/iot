@@ -111,7 +111,6 @@ var random = function (low, high) {
 
 var sense = {
   namefile: namefile,
-  hasNamefile: hasNamefile,
   isSenseHatMatrix: isSenseHatMatrix,
   devname: devname,
   unpack: unpack,
