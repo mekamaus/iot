@@ -3,38 +3,40 @@ var glob = require('glob');
 var path = require('path');
 var stream = require('streamjs');
 
-var rotation = 0;
+var fb = (function () {
+  var namefile = function(framebuffer) {
+    return path.join(framebuffer, 'name');
+  };
 
-var namefile = function(framebuffer) {
-  return path.join(framebuffer, 'name');
-};
+  var isSenseHatMatrix = function(dir) {
+    try {
+      return fs.readFileSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
+    } catch (e) {
+      return false;
+    }
+  };
 
-var isSenseHatMatrix = function(dir) {
-  try {
-    return fs.readFileSync(namefile(dir)).toString().trim() === 'RPi-Sense FB';
-  } catch (e) {
-    return false;
+  var devname = function(path) {
+    return '/dev/' + path.split('/').reverse()[0];
+  };
+
+  var files = glob.sync('/sys/class/graphics/fb*');
+
+  var frameBufferFile = stream(files)
+    .filter(isSenseHatMatrix)
+    .findFirst();
+
+  if (!frameBufferFile.isPresent()) {
+    console.error(
+      'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
+    );
+    return;
   }
-};
 
-var devname = function(path) {
-  return '/dev/' + path.split('/').reverse()[0];
-};
+  return devname(frameBufferFile.get());
+})();
 
-var files = glob.sync('/sys/class/graphics/fb*');
-
-var a = stream(files)
-  .filter(isSenseHatMatrix)
-  .findFirst();
-
-if (!a.isPresent()) {
-  console.error(
-    'Cannot find a Raspberry Pi Sense HAT matrix LED! Are we running on a Pi?'
-  );
-  return;
-}
-
-var fb = devname(a.get());
+var rotation = 0;
 
 var pos = function(x, y, r) {
   if (r === 0) {
@@ -58,10 +60,29 @@ var clear = function(fb) {
 };
 
 var validateRGB = function(rgb) {
-  rgb.map(function(col) {
-    if (col < 0 || col > 255) throw new Error('RGB color ' + rgb +
-      ' violates [0, 0, 0] <= RGB <= [255, 255, 255]');
-    return col;
+  if (!rgb || typeof rgb !== 'object' || rgb.length !== 3) {
+    throw new Error('Invalid color ' + rgb '; must be in form [R, G, B]');
+  }
+  rgb.forEach(function(col) {
+    if (col < 0 || col > 255) {
+      throw new Error('RGB color ' + rgb +
+        ' violates [0, 0, 0] <= RGB <= [255, 255, 255]');
+    }
+  });
+};
+
+var validatePixels = function (pixels) {
+  var errorMessage = 'Pixels must be an 8x8 array of [R, G, B] values';
+  if (!pixels || typeof pixels !== 'object' ||  pixels.length !== 8) {
+    throw new Error(errorMessage);
+  }
+  pixels.forEach(function (row) {
+    if (!row || typeof row !== 'object' || row.length !== 8) {
+      throw new Error(errorMessage);
+    }
+    row.forEach(function (rgb) {
+      validateRGB(rgb);
+    });
   });
 };
 
@@ -69,7 +90,10 @@ var setPixels = function(fb, pixels) {
   var pixelFn = null;
   if (typeof pixels === 'function') {
     pixelFn = pixels;
+  } else {
+    validatePixels(pixels);
   }
+
   var fd = fs.openSync(fb, 'w');
   var buf = new Buffer(2);
   for (var y = 8; --y >= 0;) {
@@ -132,11 +156,7 @@ var setPixel = function(fb, x, y, rgb) {
   if (x < 0 || x > 7) throw new Error('x = ' + x + ' violates 0 <= x <= 7');
   if (y < 0 || y > 7) throw new Error('y = ' + y + ' violates 0 <= y <= 7');
 
-  rgb.map(function(col) {
-    if (col < 0 || col > 255) throw new Error('RGB color ' + rgb +
-      ' violates [0, 0, 0] <= RGB <= [255, 255, 255]');
-    return col;
-  });
+  validateRGB(rgb);
   var fd = fs.openSync(fb, 'w');
   var buf = new Buffer(2);
   var n = pack(rgb);
@@ -158,8 +178,6 @@ var rot90 = function (matrix) {
   }
   return result;
 };
-
-var rotation = 0;
 
 var setRotation = function (fb, r) {
   if(r !== 0 && r !== 90 && r !== 180 && r !== 270) {

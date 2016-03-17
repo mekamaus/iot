@@ -5,7 +5,6 @@ COPY . /usr/src/app
 RUN ln -s /usr/src/app /app
 
 RUN apt-get update
-RUN apt-get install librsvg2-bin
 RUN npm install -g coffee-script
 
 CMD npm start
