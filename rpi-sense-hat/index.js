@@ -61,7 +61,7 @@ var clear = function(fb) {
 
 var validateRGB = function(rgb) {
   if (!rgb || typeof rgb !== 'object' || rgb.length !== 3) {
-    throw new Error('Invalid color ' + rgb '; must be in form [R, G, B]');
+    throw new Error('Invalid color ' + rgb + ' must be in form [R, G, B]');
   }
   rgb.forEach(function(col) {
     if (col < 0 || col > 255) {
