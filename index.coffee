@@ -1,12 +1,7 @@
 sense = require './rpi-sense-hat'
-usleep = require('sleep').usleep
-Rsvg = require('librsvg').Rsvg
 coreAudio = require 'node-core-audio'
 
 audioEngine = coreAudio.createNewAudioEngine()
-
-sleep = (delay) =>
-  usleep delay * 1000000
 
 average = (numbers) ->
   sum = 0
