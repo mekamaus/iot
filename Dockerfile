@@ -5,6 +5,7 @@ COPY . /usr/src/app
 RUN ln -s /usr/src/app /app
 
 RUN apt-get update
+RUN apt-get install libusb-dev
 RUN npm install -g coffee-script
 
 CMD npm start
