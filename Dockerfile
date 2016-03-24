@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian
+FROM resin/raspberrypi2-node
 
 # Install any global packages
 RUN apt-get upgrade
