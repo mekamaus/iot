@@ -9,7 +9,7 @@ RUN npm install -g coffee-script
 
 # Setup node environment
 COPY package.json /usr/src/app/
-RUN DEBIAN_FRONTEND=noninteractive JOBS=MAX npm install --unsafe-perm
+RUN TEST_ENVVAR=test DEBIAN_FRONTEND=noninteractive JOBS=MAX npm install --unsafe-perm
 COPY . /usr/src/app
 RUN ln -s /usr/src/app /app
 
