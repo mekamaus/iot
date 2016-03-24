@@ -1,4 +1,4 @@
-FROM resin/raspberrypi2-node:0.10.22-onbuildfuriedjkfjskdfsd
+FROM resin/rpi-raspbian
 
 # Install any global packages
 RUN echo "here"
