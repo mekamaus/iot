@@ -1,23 +1,12 @@
 sense = require './rpi-sense-hat'
 glob = require 'glob'
+color = require 'color'
+hid = require 'node-hid'
 
-console.log glob.sync '/dev/*'
-console.log glob.sync '/dev/input/*'
+console.log hid.devices()
 
 updateDisplay = (a) -> sense.setPixels (x, y) ->
   dist2 = (x - 3.5) * (x - 3.5) + (y - 3.5) * (y - 3.5)
   fac = 0.35 - .25 * a
   intensity = Math.exp -fac * dist2
-  if intensity <= 0.5
-    color = [
-      Math.ceil 255 * intensity * 2
-      0
-      0
-    ]
-  else
-    color = [
-      255
-      Math.ceil 255 * (intensity - 0.5) * 2
-      Math.ceil 255 * (intensity - 0.5) * 2
-    ]
-  color
+  color('red').lightness(intensity).rgbArray()
