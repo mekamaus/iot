@@ -1,21 +1,12 @@
 sense = require './rpi-sense-hat'
-coreAudio = require 'node-core-audio'
+glob = require 'glob'
 
-audioEngine = coreAudio.createNewAudioEngine()
+console.log glob.sync '/dev/*'
+console.log glob.sync '/dev/input/*'
 
-average = (numbers) ->
-  sum = 0
-  for i in [0...numbers.length]
-    sum += numbers[i]
-  sum / numbers.length
-
-updateDisplay = (volume) -> sense.setPixels (x, y) ->
+updateDisplay = (a) -> sense.setPixels (x, y) ->
   dist2 = (x - 3.5) * (x - 3.5) + (y - 3.5) * (y - 3.5)
-  minVolume = 0
-  maxVolume = 0.25
-  clampedVolume = max(min(volume, maxVolume), minVolume)
-  v = (clampedVolume - minVolume) / (maxVolume - minVolume)
-  fac = 0.35 - .25 * v
+  fac = 0.35 - .25 * a
   intensity = Math.exp -fac * dist2
   if intensity <= 0.5
     color = [
@@ -30,9 +21,3 @@ updateDisplay = (volume) -> sense.setPixels (x, y) ->
       Math.ceil 255 * (intensity - 0.5) * 2
     ]
   color
-
-
-engine.addAudioCallback (inputBuffer) ->
-  volume = average(Math.abs(x) for x in inputBuffer[0])
-  updateDisplay volume
-  inputBuffer

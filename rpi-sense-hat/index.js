@@ -167,18 +167,6 @@ var setPixel = function(fb, x, y, rgb) {
   fs.closeSync(fd);
 };
 
-var rot90 = function (matrix) {
-  var result = matrix.map(function (row) {
-    return row.slice();
-  });
-  for (var y = 8; --y >= 0;) {
-    for (var x = 8; --x >= 0;) {
-      result[x][7 - y] = matrix[y][x];
-    }
-  }
-  return result;
-};
-
 var setRotation = function (fb, r) {
   if(r !== 0 && r !== 90 && r !== 180 && r !== 270) {
     throw RangeError('Rotation must be 0, 90, 180 or 270 degrees');

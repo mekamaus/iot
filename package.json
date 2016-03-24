@@ -21,9 +21,10 @@
     "fs-utils": "^0.7.0",
     "get-pixels": "^3.3.0",
     "glob": "^7.0.3",
+    "linux-input-device": "^1.0.0",
+    "node-core-audio": "^0.5.0",
     "path": "^0.12.7",
     "sleep": "^3.0.1",
-    "streamjs": "^1.6.4",
-    "node-core-audio": "^0.5.0"
+    "streamjs": "^1.6.4"
   }
 }
