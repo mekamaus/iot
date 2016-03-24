@@ -4,8 +4,9 @@ RUN DEBIAN_FRONTEND=noninteractive JOBS=MAX npm install --unsafe-perm
 COPY . /usr/src/app
 RUN ln -s /usr/src/app /app
 
+RUN apt-get upgrade
 RUN apt-get update
-RUN apt-get install libusb-dev
+RUN apt-get install libusb-1.0.0-dev
 RUN npm install -g coffee-script
 
 CMD npm start
