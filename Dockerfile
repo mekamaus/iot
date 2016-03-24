@@ -1,7 +1,6 @@
 FROM resin/rpi-raspbian
 
 # Install any global packages
-RUN echo "here"
 RUN apt-get upgrade
 RUN apt-get update
 RUN apt-get install libusb-1.0.0-dev
