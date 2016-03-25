@@ -1,6 +1,7 @@
 FROM resin/raspberrypi2-node:0.10.22-onbuild
 
 # Install any global packages
+RUN echo "here"
 RUN apt-get upgrade
 RUN apt-get update
 RUN apt-get install libusb-1.0.0-dev
