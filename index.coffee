@@ -1,4 +1,4 @@
-sense = require './rpi-sense-hat'
+sense = require 'rpi-sense-hat'
 glob = require 'glob'
 color = require 'color'
 hid = require 'node-hid'
