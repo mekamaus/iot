@@ -6,12 +6,13 @@ RUN apt-get update
 RUN apt-get install libusb-1.0.0-dev
 
 # Setup node environment
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
-RUN DEBIAN_FRONTEND=noninteractive JOBS=MAX npm install --unsafe-perm
+RUN npm install
+
 COPY . /usr/src/app
-EXPOSE 8080
-RUN ln -s /usr/src/app /app
 
 # Start node environment
-CMD echo "testing"
+EXPOSE 8080
 CMD [ "npm", "start" ]
