@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/sadams9/iot#readme",
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "babel-register": "^6.24.1",
     "color": "^0.11.1",
     "fs-utils": "^0.7.0",
     "get-pixels": "^3.3.0",
