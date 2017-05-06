@@ -1,9 +1,9 @@
 import sense from 'rpi-sense-hat';
 import glob from 'glob';
 import color from 'color';
-import hid from 'node-hid';
+//import hid from 'node-hid';
 
-console.log(hid.devices());
+//console.log(hid.devices());
 
 var updateDisplay = a => sense.setPixels((x, y) => {
   const dist2 = (x - 3.5) * (x - 3.5) + (y - 3.5) * (y - 3.5);
